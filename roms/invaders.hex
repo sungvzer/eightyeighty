@@ -1,0 +1,33 @@
+Args { input: "roms/invaders.concatenated", output: Some("disass/invaders.8080") }
+[0]
+Unknown
+[0]
+Unknown
+[0]
+Unknown
+[195, 212, 24]
+Unknown
+[0]
+Unknown
+[0]
+Unknown
+[245]
+Unknown
+[197]
+Unknown
+[213]
+Unknown
+[229]
+Unknown
+[195, 140, 0]
+Unknown
+[0]
+Unknown
+[245]
+Unknown
+[197]
+Unknown
+[213]
+Unknown
+[229]
+Unknown
