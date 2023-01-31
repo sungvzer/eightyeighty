@@ -36,12 +36,46 @@ impl InstructionParser {
 
     pub fn parse(&mut self) -> Option<Instruction> {
         let bytes = self.consume_next()?;
-        for byte in bytes {
+        for byte in &bytes {
             print!("0x{:02x} ", byte);
         }
-        println!();
 
-        Some(Instruction::Unknown)
+        let opcode = bytes.get(0)?;
+
+        // Trivial opcodes
+        let mut parsed = match opcode {
+            0x00 | 0x10 | 0x20 | 0x30 | 0x08 | 0x18 | 0x28 | 0x38 => Some(Instruction::NOP),
+            0x07 => Some(Instruction::RLC),
+            0x0f => Some(Instruction::RRC),
+
+            0x17 => Some(Instruction::RAL),
+            0x1f => Some(Instruction::RAR),
+
+            0x27 => Some(Instruction::DAA),
+            0x2f => Some(Instruction::CMA),
+
+            0x37 => Some(Instruction::STC),
+            0x3f => Some(Instruction::CMC),
+
+            0x76 => Some(Instruction::HLT),
+
+            0xc9 => Some(Instruction::RET),
+
+            0xeb => Some(Instruction::XCHG),
+            0xe3 => Some(Instruction::XTHL),
+            0xe9 => Some(Instruction::PCHL),
+
+            0xf9 => Some(Instruction::SPHL),
+            0xfb => Some(Instruction::EI),
+            0xf3 => Some(Instruction::DI),
+            _ => None,
+        };
+
+        if let None = parsed {
+            parsed = Some(Instruction::Unknown);
+        };
+        println!("{:?}", parsed.as_ref().unwrap());
+        parsed
     }
 
     /**
@@ -79,6 +113,7 @@ impl InstructionParser {
             0x14 => 0, // INR D
             0x15 => 0, // DCR D
             0x16 => 1, // MVI D,d8
+            0x17 => 0, // RAL
             0x18 => 0, // NOP
             0x19 => 0, // DAD D
             0x1a => 0, // LDAX D
