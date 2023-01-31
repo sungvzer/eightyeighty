@@ -10,14 +10,13 @@ impl InstructionParser {
         InstructionParser { buffer, cursor: 0 }
     }
 
-    fn consume_next_opcode(&mut self) -> Option<Vec<u8>> {
+    fn consume_next(&mut self) -> Option<Vec<u8>> {
         if self.cursor == self.buffer.len() {
             return None;
         }
         let mut bytes = vec![];
 
-        // FIXME: Error handling
-        let mut current_byte = *self.buffer.get(self.cursor).unwrap();
+        let mut current_byte = *self.buffer.get(self.cursor)?;
         self.cursor += 1;
 
         bytes.push(current_byte);
@@ -28,8 +27,7 @@ impl InstructionParser {
         }
 
         for _ in 0..number_of_bytes_to_read {
-            // FIXME: Error handling
-            current_byte = *self.buffer.get(self.cursor).unwrap();
+            current_byte = *self.buffer.get(self.cursor)?;
             bytes.push(current_byte);
             self.cursor += 1;
         }
@@ -37,7 +35,7 @@ impl InstructionParser {
     }
 
     pub fn parse(&mut self) -> Option<Instruction> {
-        let bytes = self.consume_next_opcode()?;
+        let bytes = self.consume_next()?;
         for byte in bytes {
             print!("0x{:02x} ", byte);
         }
