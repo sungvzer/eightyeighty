@@ -43,7 +43,7 @@ impl InstructionParser {
         let opcode = bytes.get(0)?;
 
         // Trivial opcodes
-        let mut parsed = match opcode {
+        let parsed = match opcode {
             0x00 | 0x10 | 0x20 | 0x30 | 0x08 | 0x18 | 0x28 | 0x38 => Some(Instruction::NOP),
             0x07 => Some(Instruction::RLC),
             0x0f => Some(Instruction::RRC),
@@ -69,6 +69,13 @@ impl InstructionParser {
             0xfb => Some(Instruction::EI),
             0xf3 => Some(Instruction::DI),
             _ => None,
+        };
+
+        let parse_low_high_byte = |bytes: &[u8]| {
+            assert_eq!(bytes.len(), 3);
+            let low_byte = bytes[1] as u16;
+            let high_byte = bytes[2] as u16;
+            (high_byte << 8) + low_byte
         };
 
         if parsed.is_some() {
@@ -99,9 +106,7 @@ impl InstructionParser {
         // Parse LXI instruction -> 00RP0001
         if (opcode & 0xc0) == 0x00 && opcode & 0x0f == 0x01 {
             assert_eq!(bytes.len(), 3);
-            let low_byte = bytes[1] as u16;
-            let high_byte = bytes[2] as u16;
-            let immediate: u16 = (high_byte << 8) + low_byte;
+            let immediate: u16 = parse_low_high_byte(&bytes);
 
             let register_pair = (opcode & 0x30) >> 4;
             let register_pair = RegisterPair::try_from(register_pair);
@@ -111,8 +116,21 @@ impl InstructionParser {
             return Some(Instruction::LXI(register_pair.unwrap(), immediate));
         }
 
-        parsed = Some(Instruction::Unknown);
-        parsed
+        // Parse LDA instruction -> 00111010
+        if *opcode == 0x3a {
+            assert_eq!(bytes.len(), 3);
+            let address: u16 = parse_low_high_byte(&bytes);
+            return Some(Instruction::LDA(address));
+        }
+
+        // Parse STA instruction -> 00110010
+        if *opcode == 0x32 {
+            assert_eq!(bytes.len(), 3);
+            let address: u16 = parse_low_high_byte(&bytes);
+            return Some(Instruction::STA(address));
+        }
+
+        Some(Instruction::Unknown)
     }
 
     /**

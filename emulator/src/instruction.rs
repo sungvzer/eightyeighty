@@ -12,6 +12,12 @@ pub enum Instruction {
     /// Load register pair immediate
     LXI(RegisterPair, u16),
 
+    /// Load A from memory
+    LDA(u16),
+
+    /// Store A to memory
+    STA(u16),
+
     /// Unconditional jump
     JMP(u16),
 
@@ -93,6 +99,8 @@ impl Debug for Instruction {
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
+            Instruction::LDA(address) => write!(f, "LDA ${address:04x}"),
+            Instruction::STA(address) => write!(f, "STA ${address:04x}"),
         }
     }
 }

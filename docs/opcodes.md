@@ -49,8 +49,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | MOV D,S  | 01DDDSSS       |   -   | Move register to register             |   ✔️    |      ❌      |
 | MVI D,#  | 00DDD110 db    |   -   | Move immediate to register            |   ✔️    |      ❌      |
 | LXI RP,# | 00RP0001 lb hb |   -   | Load register pair immediate          |   ✔️    |      ❌      |
-| LDA a    | 00111010 lb hb |   -   | Load A from memory                    |   ❌    |      ❌      |
-| STA a    | 00110010 lb hb |   -   | Store A to memory                     |   ❌    |      ❌      |
+| LDA a    | 00111010 lb hb |   -   | Load A from memory                    |   ✔️    |      ❌      |
+| STA a    | 00110010 lb hb |   -   | Store A to memory                     |   ✔️    |      ❌      |
 | LHLD a   | 00101010 lb hb |   -   | Load H:L from memory                  |   ❌    |      ❌      |
 | SHLD a   | 00100010 lb hb |   -   | Store H:L to memory                   |   ❌    |      ❌      |
 | LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ❌    |      ❌      |
