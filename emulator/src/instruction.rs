@@ -1,6 +1,11 @@
 use std::fmt::Debug;
 
+use crate::register::Register;
+
 pub enum Instruction {
+    /// Move register to register
+    MOV(Register, Register),
+
     /// Unconditional jump
     JMP(u16),
 
@@ -79,6 +84,7 @@ impl Debug for Instruction {
             Instruction::CMC => write!(f, "CMC"),
             Instruction::STC => write!(f, "STC"),
             Instruction::RET => write!(f, "RET"),
+            Instruction::MOV(dest, src) => write!(f, "MOV ${dest} ${src}"),
         }
     }
 }

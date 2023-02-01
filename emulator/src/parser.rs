@@ -71,10 +71,24 @@ impl InstructionParser {
             _ => None,
         };
 
-        if let None = parsed {
-            parsed = Some(Instruction::Unknown);
-        };
-        println!("{:?}", parsed.as_ref().unwrap());
+        if parsed.is_some() {
+            return parsed;
+        }
+
+        let dest_mask: u8 = 0x38; // 0b00111000
+        let src_mask: u8 = 0x07; // 0b00000111
+
+        // Parse MOV instruction -> if top two bits are 01
+        if (opcode & 0xC0) == 0x40 {
+            let dest = (opcode & dest_mask) >> 3;
+            let src = opcode & src_mask;
+
+            let dest = dest.try_into().unwrap();
+            let src = src.try_into().unwrap();
+            return Some(Instruction::MOV(dest, src));
+        }
+
+        parsed = Some(Instruction::Unknown);
         parsed
     }
 

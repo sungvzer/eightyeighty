@@ -52,5 +52,7 @@ fn main() {
 
     let mut parser = InstructionParser::new(bytes);
 
-    while let Some(insn) = parser.parse() {}
+    while let Some(insn) = parser.parse() {
+        println!("{insn:?}");
+    }
 }
