@@ -79,13 +79,21 @@ impl InstructionParser {
         let src_mask: u8 = 0x07; // 0b00000111
 
         // Parse MOV instruction -> if top two bits are 01
-        if (opcode & 0xC0) == 0x40 {
+        if (opcode & 0xc0) == 0x40 {
             let dest = (opcode & dest_mask) >> 3;
             let src = opcode & src_mask;
 
             let dest = dest.try_into().unwrap();
             let src = src.try_into().unwrap();
             return Some(Instruction::MOV(dest, src));
+        }
+
+        // Parse MVI instruction -> 00DDD110
+        if (opcode & 0xc0) == 0x00 && opcode & src_mask == 0x06 {
+            assert_eq!(bytes.len(), 2);
+            let dest = (opcode & dest_mask) >> 3;
+            let dest = dest.try_into().unwrap();
+            return Some(Instruction::MVI(dest, bytes[1]));
         }
 
         parsed = Some(Instruction::Unknown);

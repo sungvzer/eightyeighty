@@ -6,6 +6,9 @@ pub enum Instruction {
     /// Move register to register
     MOV(Register, Register),
 
+    /// Move immediate to register
+    MVI(Register, u8),
+
     /// Unconditional jump
     JMP(u16),
 
@@ -84,7 +87,8 @@ impl Debug for Instruction {
             Instruction::CMC => write!(f, "CMC"),
             Instruction::STC => write!(f, "STC"),
             Instruction::RET => write!(f, "RET"),
-            Instruction::MOV(dest, src) => write!(f, "MOV ${dest} ${src}"),
+            Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
+            Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
         }
     }
 }
