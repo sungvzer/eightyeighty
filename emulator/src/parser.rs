@@ -1,4 +1,4 @@
-use crate::instruction::Instruction;
+use crate::{instruction::Instruction, register::RegisterPair};
 
 pub struct InstructionParser {
     buffer: Vec<u8>,
@@ -94,6 +94,21 @@ impl InstructionParser {
             let dest = (opcode & dest_mask) >> 3;
             let dest = dest.try_into().unwrap();
             return Some(Instruction::MVI(dest, bytes[1]));
+        }
+
+        // Parse LXI instruction -> 00RP0001
+        if (opcode & 0xc0) == 0x00 && opcode & 0x0f == 0x01 {
+            assert_eq!(bytes.len(), 3);
+            let low_byte = bytes[1] as u16;
+            let high_byte = bytes[2] as u16;
+            let immediate: u16 = (high_byte << 8) + low_byte;
+
+            let register_pair = (opcode & 0x30) >> 4;
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            return Some(Instruction::LXI(register_pair.unwrap(), immediate));
         }
 
         parsed = Some(Instruction::Unknown);

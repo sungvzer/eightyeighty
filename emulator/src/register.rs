@@ -11,6 +11,46 @@ pub enum Register {
     M,
 }
 
+pub enum RegisterPair {
+    /// B:C as 16 bit register
+    BC,
+
+    /// D:E as 16 bit register
+    DE,
+
+    /// H:L as 16 bit register
+    HL,
+
+    /// Stack pointer, refers to PSW (FLAGS:A) for PUSH/POP
+    SP,
+}
+
+impl Display for RegisterPair {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            // Register pairs are printed with one char except for the SP variant
+            RegisterPair::BC => write!(f, "B"),
+            RegisterPair::DE => write!(f, "D"),
+            RegisterPair::HL => write!(f, "H"),
+            RegisterPair::SP => write!(f, "SP"),
+        }
+    }
+}
+
+impl TryFrom<u8> for RegisterPair {
+    type Error = &'static str;
+
+    fn try_from(value: u8) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(RegisterPair::BC),
+            1 => Ok(RegisterPair::DE),
+            2 => Ok(RegisterPair::HL),
+            3 => Ok(RegisterPair::SP),
+            _ => Err("Invalid register pair reference"),
+        }
+    }
+}
+
 impl Display for Register {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

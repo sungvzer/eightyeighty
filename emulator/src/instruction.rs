@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::register::Register;
+use crate::register::{Register, RegisterPair};
 
 pub enum Instruction {
     /// Move register to register
@@ -8,6 +8,9 @@ pub enum Instruction {
 
     /// Move immediate to register
     MVI(Register, u8),
+
+    /// Load register pair immediate
+    LXI(RegisterPair, u16),
 
     /// Unconditional jump
     JMP(u16),
@@ -89,6 +92,7 @@ impl Debug for Instruction {
             Instruction::RET => write!(f, "RET"),
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
+            Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
         }
     }
 }
