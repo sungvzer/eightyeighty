@@ -53,8 +53,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | STA a    | 00110010 lb hb |   -   | Store A to memory                     |   ✔️    |      ❌      |
 | LHLD a   | 00101010 lb hb |   -   | Load H:L from memory                  |   ✔️    |      ❌      |
 | SHLD a   | 00100010 lb hb |   -   | Store H:L to memory                   |   ✔️    |      ❌      |
-| LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ❌    |      ❌      |
-| STAX RP  | 00RP0010 *1    |   -   | Store indirect through BC or DE       |   ❌    |      ❌      |
+| LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ✔️    |      ❌      |
+| STAX RP  | 00RP0010 *1    |   -   | Store indirect through BC or DE       |   ✔️    |      ❌      |
 | XCHG     | 11101011       |   -   | Exchange DE and HL content            |   ✔️    |      ❌      |
 | ADD S    | 10000SSS       | ZSPCA | Add register to A                     |   ❌    |      ❌      |
 | ADI #    | 11000110 db    | ZSCPA | Add immediate to A                    |   ❌    |      ❌      |

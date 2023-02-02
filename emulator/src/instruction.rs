@@ -24,6 +24,12 @@ pub enum Instruction {
     /// Store H:L to memory
     SHLD(u16),
 
+    /// Load indirect through BC or DE
+    LDAX(RegisterPair),
+
+    /// Store indirect through BC or DE
+    STAX(RegisterPair),
+
     /// Unconditional jump
     JMP(u16),
 
@@ -109,6 +115,8 @@ impl Debug for Instruction {
             Instruction::STA(address) => write!(f, "STA ${address:04x}"),
             Instruction::LHLD(address) => write!(f, "LHLD ${address:04x}"),
             Instruction::SHLD(address) => write!(f, "SHLD ${address:04x}"),
+            Instruction::LDAX(pair) => write!(f, "LDAX {pair}"),
+            Instruction::STAX(pair) => write!(f, "STAX {pair}"),
         }
     }
 }

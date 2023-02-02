@@ -141,6 +141,30 @@ impl InstructionParser {
             return Some(Instruction::SHLD(address));
         }
 
+        // Parse LDAX instruction -> 00RP1010
+        if (opcode & 0xc0) == 0x00 && opcode & 0x0f == 0x0a {
+            let register_pair = (opcode & 0x30) >> 4;
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            let register_pair = register_pair.unwrap();
+            assert!(register_pair == RegisterPair::BC || register_pair == RegisterPair::DE);
+            return Some(Instruction::LDAX(register_pair));
+        }
+
+        // Parse STAX instruction -> 00RP0010
+        if (opcode & 0xc0) == 0x00 && opcode & 0x0f == 0x02 {
+            let register_pair = (opcode & 0x30) >> 4;
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            let register_pair = register_pair.unwrap();
+            assert!(register_pair == RegisterPair::BC || register_pair == RegisterPair::DE);
+            return Some(Instruction::STAX(register_pair));
+        }
+
         Some(Instruction::Unknown)
     }
 

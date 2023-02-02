@@ -11,6 +11,7 @@ pub enum Register {
     M,
 }
 
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
 pub enum RegisterPair {
     /// B:C as 16 bit register
     BC,
