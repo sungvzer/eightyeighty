@@ -179,6 +179,20 @@ impl InstructionParser {
             return Some(Instruction::ADI(immediate));
         }
 
+        // Parse ADC instruction -> 10001SSS
+        if (opcode & 0xf8) == 0x88 {
+            let src = opcode & src_mask;
+            let src = src.try_into().unwrap();
+            return Some(Instruction::ADC(src));
+        }
+
+        // Parse ACI instruction -> 11001110
+        if *opcode == 0xce {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::ACI(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 

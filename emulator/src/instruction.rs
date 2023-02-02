@@ -42,6 +42,12 @@ pub enum Instruction {
     /// Add immediate to A
     ADI(u8),
 
+    /// Add register to A with carry
+    ADC(Register),
+
+    /// Add immediate to A with carry
+    ACI(u8),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -117,6 +123,8 @@ impl Debug for Instruction {
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
             Instruction::ADD(src) => write!(f, "ADD {src}"),
             Instruction::ADI(imm) => write!(f, "ADI #${imm:02x}"),
+            Instruction::ADC(src) => write!(f, "ADC {src}"),
+            Instruction::ACI(imm) => write!(f, "ACI #${imm:02x}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
             Instruction::LDA(address) => write!(f, "LDA ${address:04x}"),

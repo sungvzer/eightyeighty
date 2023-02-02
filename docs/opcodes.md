@@ -58,8 +58,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | XCHG     | 11101011       |   -   | Exchange DE and HL content            |   ✔️    |      ❌      |
 | ADD S    | 10000SSS       | ZSPCA | Add register to A                     |   ✔️    |      ❌      |
 | ADI #    | 11000110 db    | ZSCPA | Add immediate to A                    |   ✔️    |      ❌      |
-| ADC S    | 10001SSS       | ZSCPA | Add register to A with carry          |   ❌    |      ❌      |
-| ACI #    | 11001110 db    | ZSCPA | Add immediate to A with carry         |   ❌    |      ❌      |
+| ADC S    | 10001SSS       | ZSCPA | Add register to A with carry          |   ✔️    |      ❌      |
+| ACI #    | 11001110 db    | ZSCPA | Add immediate to A with carry         |   ✔️    |      ❌      |
 | SUB S    | 10010SSS       | ZSCPA | Subtract register from A              |   ❌    |      ❌      |
 | SUI #    | 11010110 db    | ZSCPA | Subtract immediate from A             |   ❌    |      ❌      |
 | SBB S    | 10011SSS       | ZSCPA | Subtract register from A with borrow  |   ❌    |      ❌      |
