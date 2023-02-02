@@ -60,10 +60,10 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | ADI #    | 11000110 db    | ZSCPA | Add immediate to A                    |   ✔️    |      ❌      |
 | ADC S    | 10001SSS       | ZSCPA | Add register to A with carry          |   ✔️    |      ❌      |
 | ACI #    | 11001110 db    | ZSCPA | Add immediate to A with carry         |   ✔️    |      ❌      |
-| SUB S    | 10010SSS       | ZSCPA | Subtract register from A              |   ❌    |      ❌      |
-| SUI #    | 11010110 db    | ZSCPA | Subtract immediate from A             |   ❌    |      ❌      |
-| SBB S    | 10011SSS       | ZSCPA | Subtract register from A with borrow  |   ❌    |      ❌      |
-| SBI #    | 11011110 db    | ZSCPA | Subtract immediate from A with borrow |   ❌    |      ❌      |
+| SUB S    | 10010SSS       | ZSCPA | Subtract register from A              |   ✔️    |      ❌      |
+| SUI #    | 11010110 db    | ZSCPA | Subtract immediate from A             |   ✔️    |      ❌      |
+| SBB S    | 10011SSS       | ZSCPA | Subtract register from A with borrow  |   ✔️    |      ❌      |
+| SBI #    | 11011110 db    | ZSCPA | Subtract immediate from A with borrow |   ✔️    |      ❌      |
 | INR D    | 00DDD100       | ZSPA  | Increment register                    |   ❌    |      ❌      |
 | DCR D    | 00DDD101       | ZSPA  | Decrement register                    |   ❌    |      ❌      |
 | INX RP   | 00RP0011       |   -   | Increment register pair               |   ❌    |      ❌      |

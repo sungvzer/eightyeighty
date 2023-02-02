@@ -48,6 +48,18 @@ pub enum Instruction {
     /// Add immediate to A with carry
     ACI(u8),
 
+    /// Subtract register from A
+    SUB(Register),
+
+    /// Subtract immediate from A
+    SUI(u8),
+
+    /// Subtract register from A with borrow
+    SBB(Register),
+
+    /// Subtract immediate from A with borrow
+    SBI(u8),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -122,9 +134,13 @@ impl Debug for Instruction {
             Instruction::RET => write!(f, "RET"),
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
             Instruction::ADD(src) => write!(f, "ADD {src}"),
+            Instruction::SUB(src) => write!(f, "SUB {src}"),
             Instruction::ADI(imm) => write!(f, "ADI #${imm:02x}"),
+            Instruction::SUI(imm) => write!(f, "SUI #${imm:02x}"),
             Instruction::ADC(src) => write!(f, "ADC {src}"),
+            Instruction::SBB(src) => write!(f, "SBB {src}"),
             Instruction::ACI(imm) => write!(f, "ACI #${imm:02x}"),
+            Instruction::SBI(imm) => write!(f, "SBI #${imm:02x}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
             Instruction::LDA(address) => write!(f, "LDA ${address:04x}"),

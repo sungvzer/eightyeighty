@@ -189,6 +189,32 @@ impl InstructionParser {
             return Some(Instruction::ACI(immediate));
         }
 
+        // Parse SUB instruction -> 10010SSS
+        if (opcode & 0xf8) == 0x90 {
+            let src = src.try_into().unwrap();
+            return Some(Instruction::SUB(src));
+        }
+
+        // Parse SUI instruction -> 11010110
+        if *opcode == 0xd6 {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::SUI(immediate));
+        }
+
+        // Parse SBB instruction -> 10011SSS
+        if (opcode & 0xf8) == 0x98 {
+            let src = src.try_into().unwrap();
+            return Some(Instruction::SBB(src));
+        }
+
+        // Parse SBI instruction -> 11011110
+        if *opcode == 0xde {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::SBI(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 
