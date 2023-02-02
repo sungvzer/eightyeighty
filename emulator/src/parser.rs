@@ -226,6 +226,24 @@ impl InstructionParser {
             return Some(Instruction::DCR(dest));
         }
 
+        // Parse INX instruction -> 00RP0011
+        if (opcode & 0xcf) == 0x03 {
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            return Some(Instruction::INX(register_pair.unwrap()));
+        }
+
+        // Parse DCX instruction -> 00RP1011
+        if (opcode & 0xcf) == 0x0b {
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            return Some(Instruction::DCX(register_pair.unwrap()));
+        }
+
         Some(Instruction::Unknown)
     }
 

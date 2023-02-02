@@ -66,6 +66,12 @@ pub enum Instruction {
     /// Decrement register
     DCR(Register),
 
+    /// Increment register pair
+    INX(RegisterPair),
+
+    /// Decrement register pair
+    DCX(RegisterPair),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -157,6 +163,8 @@ impl Debug for Instruction {
             Instruction::SHLD(address) => write!(f, "SHLD ${address:04x}"),
             Instruction::LDAX(pair) => write!(f, "LDAX {pair}"),
             Instruction::STAX(pair) => write!(f, "STAX {pair}"),
+            Instruction::INX(pair) => write!(f, "INX {pair}"),
+            Instruction::DCX(pair) => write!(f, "DCX {pair}"),
         }
     }
 }
