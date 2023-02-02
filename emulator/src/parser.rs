@@ -292,6 +292,19 @@ impl InstructionParser {
             return Some(Instruction::XRI(immediate));
         }
 
+        // Parse CMP instruction -> 10111SSS
+        if (opcode & 0xf8) == 0xb8 {
+            let src = src.try_into().unwrap();
+            return Some(Instruction::CMP(src));
+        }
+
+        // Parse CPI instruction -> 11111110
+        if *opcode == 0xfe {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::CPI(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 

@@ -76,8 +76,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | ORI #    | 11110110       | ZSPCA | OR  immediate with A                  |   ✔️    |      ❌      |
 | XRA S    | 10101SSS       | ZSPCA | XOR register with A                   |   ✔️    |      ❌      |
 | XRI #    | 11101110 db    | ZSPCA | XOR immediate with A                  |   ✔️    |      ❌      |
-| CMP S    | 10111SSS       | ZSPCA | Compare register with A               |   ❌    |      ❌      |
-| CPI #    | 11111110       | ZSPCA | Compare immediate with A              |   ❌    |      ❌      |
+| CMP S    | 10111SSS       | ZSPCA | Compare register with A               |   ✔️    |      ❌      |
+| CPI #    | 11111110 db    | ZSPCA | Compare immediate with A              |   ✔️    |      ❌      |
 | RLC      | 00000111       |   C   | Rotate A left                         |   ✔️    |      ❌      |
 | RRC      | 00001111       |   C   | Rotate A right                        |   ✔️    |      ❌      |
 | RAL      | 00010111       |   C   | Rotate A left through carry           |   ✔️    |      ❌      |

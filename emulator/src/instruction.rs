@@ -93,6 +93,12 @@ pub enum Instruction {
     /// XOR immediate with A
     XRI(u8),
 
+    /// Compare register with A
+    CMP(Register),
+
+    /// Compare immediate with A
+    CPI(u8),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -167,11 +173,13 @@ impl Debug for Instruction {
             Instruction::RET => write!(f, "RET"),
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
             Instruction::ADD(src) => write!(f, "ADD {src}"),
+            Instruction::CMP(src) => write!(f, "CMP {src}"),
             Instruction::INR(src) => write!(f, "INR {src}"),
             Instruction::DCR(src) => write!(f, "DCR {src}"),
             Instruction::SUB(src) => write!(f, "SUB {src}"),
             Instruction::ADI(imm) => write!(f, "ADI #${imm:02x}"),
             Instruction::SUI(imm) => write!(f, "SUI #${imm:02x}"),
+            Instruction::CPI(imm) => write!(f, "CPI #${imm:02x}"),
             Instruction::ADC(src) => write!(f, "ADC {src}"),
             Instruction::ANA(src) => write!(f, "ANA {src}"),
             Instruction::XRA(src) => write!(f, "XRA {src}"),
