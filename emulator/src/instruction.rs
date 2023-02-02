@@ -36,6 +36,12 @@ pub enum Instruction {
     /// Exchange DE and HL content
     XCHG,
 
+    /// Add register to A
+    ADD(Register),
+
+    /// Add immediate to A
+    ADI(u8),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -109,6 +115,8 @@ impl Debug for Instruction {
             Instruction::STC => write!(f, "STC"),
             Instruction::RET => write!(f, "RET"),
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
+            Instruction::ADD(src) => write!(f, "ADD {src}"),
+            Instruction::ADI(imm) => write!(f, "ADI #${imm:02x}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
             Instruction::LDA(address) => write!(f, "LDA ${address:04x}"),

@@ -56,8 +56,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ✔️    |      ❌      |
 | STAX RP  | 00RP0010 *1    |   -   | Store indirect through BC or DE       |   ✔️    |      ❌      |
 | XCHG     | 11101011       |   -   | Exchange DE and HL content            |   ✔️    |      ❌      |
-| ADD S    | 10000SSS       | ZSPCA | Add register to A                     |   ❌    |      ❌      |
-| ADI #    | 11000110 db    | ZSCPA | Add immediate to A                    |   ❌    |      ❌      |
+| ADD S    | 10000SSS       | ZSPCA | Add register to A                     |   ✔️    |      ❌      |
+| ADI #    | 11000110 db    | ZSCPA | Add immediate to A                    |   ✔️    |      ❌      |
 | ADC S    | 10001SSS       | ZSCPA | Add register to A with carry          |   ❌    |      ❌      |
 | ACI #    | 11001110 db    | ZSCPA | Add immediate to A with carry         |   ❌    |      ❌      |
 | SUB S    | 10010SSS       | ZSCPA | Subtract register from A              |   ❌    |      ❌      |

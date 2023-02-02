@@ -165,6 +165,20 @@ impl InstructionParser {
             return Some(Instruction::STAX(register_pair));
         }
 
+        // Parse ADD instruction -> 10000SSS
+        if (opcode & 0xf8) == 0x80 {
+            let src = opcode & src_mask;
+            let src = src.try_into().unwrap();
+            return Some(Instruction::ADD(src));
+        }
+
+        // Parse ADI instruction -> 11000110
+        if *opcode == 0xc6 {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::ADI(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 
