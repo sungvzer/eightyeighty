@@ -70,12 +70,12 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | DCX RP   | 00RP1011       |   -   | Decrement register pair               |   ✔️    |      ❌      |
 | DAD RP   | 00RP1001       |   C   | Add register pair to HL (16 bit add)  |   ✔️    |      ❌      |
 | DAA      | 00100111       | ZSPCA | Decimal Adjust accumulator            |   ✔️    |      ❌      |
-| ANA S    | 10100SSS       | ZSCPA | AND register with A                   |   ❌    |      ❌      |
-| ANI #    | 11100110 db    | ZSPCA | AND immediate with A                  |   ❌    |      ❌      |
-| ORA S    | 10110SSS       | ZSPCA | OR  register with A                   |   ❌    |      ❌      |
-| ORI #    | 11110110       | ZSPCA | OR  immediate with A                  |   ❌    |      ❌      |
-| XRA S    | 10101SSS       | ZSPCA | ExclusiveOR register with A           |   ❌    |      ❌      |
-| XRI #    | 11101110 db    | ZSPCA | ExclusiveOR immediate with A          |   ❌    |      ❌      |
+| ANA S    | 10100SSS       | ZSCPA | AND register with A                   |   ✔️    |      ❌      |
+| ANI #    | 11100110 db    | ZSPCA | AND immediate with A                  |   ✔️    |      ❌      |
+| ORA S    | 10110SSS       | ZSPCA | OR  register with A                   |   ✔️    |      ❌      |
+| ORI #    | 11110110       | ZSPCA | OR  immediate with A                  |   ✔️    |      ❌      |
+| XRA S    | 10101SSS       | ZSPCA | XOR register with A                   |   ❌    |      ❌      |
+| XRI #    | 11101110 db    | ZSPCA | XOR immediate with A                  |   ❌    |      ❌      |
 | CMP S    | 10111SSS       | ZSPCA | Compare register with A               |   ❌    |      ❌      |
 | CPI #    | 11111110       | ZSPCA | Compare immediate with A              |   ❌    |      ❌      |
 | RLC      | 00000111       |   C   | Rotate A left                         |   ✔️    |      ❌      |

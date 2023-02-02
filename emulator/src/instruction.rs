@@ -75,6 +75,18 @@ pub enum Instruction {
     /// Add register pair to HL (16 bit add)
     DAD(RegisterPair),
 
+    /// AND register with A
+    ANA(Register),
+
+    /// AND immediate with A
+    ANI(u8),
+
+    /// OR register with A
+    ORA(Register),
+
+    /// OR immediate with A
+    ORI(u8),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -155,9 +167,13 @@ impl Debug for Instruction {
             Instruction::ADI(imm) => write!(f, "ADI #${imm:02x}"),
             Instruction::SUI(imm) => write!(f, "SUI #${imm:02x}"),
             Instruction::ADC(src) => write!(f, "ADC {src}"),
+            Instruction::ANA(src) => write!(f, "ANA {src}"),
+            Instruction::ORA(src) => write!(f, "ORA {src}"),
             Instruction::SBB(src) => write!(f, "SBB {src}"),
             Instruction::ACI(imm) => write!(f, "ACI #${imm:02x}"),
             Instruction::SBI(imm) => write!(f, "SBI #${imm:02x}"),
+            Instruction::ANI(imm) => write!(f, "ANI #${imm:02x}"),
+            Instruction::ORI(imm) => write!(f, "ORI #${imm:02x}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
             Instruction::LDA(address) => write!(f, "LDA ${address:04x}"),

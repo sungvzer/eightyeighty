@@ -253,6 +253,32 @@ impl InstructionParser {
             return Some(Instruction::DAD(register_pair.unwrap()));
         }
 
+        // Parse ANA instruction -> 10100SSS
+        if (opcode & 0xf8) == 0xa0 {
+            let src = src.try_into().unwrap();
+            return Some(Instruction::ANA(src));
+        }
+
+        // Parse ANI instruction -> 11100110
+        if *opcode == 0xe6 {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::ANI(immediate));
+        }
+
+        // Parse ORA instruction -> 10110SSS
+        if (opcode & 0xf8) == 0xb0 {
+            let src = src.try_into().unwrap();
+            return Some(Instruction::ORA(src));
+        }
+
+        // Parse ORI instruction -> 11110110
+        if *opcode == 0xf6 {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::ORI(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 
