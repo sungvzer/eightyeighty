@@ -130,6 +130,20 @@ impl InstructionParser {
             return Some(Instruction::STA(address));
         }
 
+        // Parse LHLD instruction -> 00101010
+        if *opcode == 0x2a {
+            assert_eq!(bytes.len(), 3);
+            let address = parse_low_high_byte(&bytes);
+            return Some(Instruction::LHLD(address));
+        }
+
+        // Parse SHLD instruction -> 00101010
+        if *opcode == 0x22 {
+            assert_eq!(bytes.len(), 3);
+            let address = parse_low_high_byte(&bytes);
+            return Some(Instruction::SHLD(address));
+        }
+
         Some(Instruction::Unknown)
     }
 

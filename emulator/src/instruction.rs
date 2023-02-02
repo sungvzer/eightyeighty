@@ -18,6 +18,12 @@ pub enum Instruction {
     /// Store A to memory
     STA(u16),
 
+    /// Load H:L from memory
+    LHLD(u16),
+
+    /// Store H:L to memory
+    SHLD(u16),
+
     /// Unconditional jump
     JMP(u16),
 
@@ -101,6 +107,8 @@ impl Debug for Instruction {
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),
             Instruction::LDA(address) => write!(f, "LDA ${address:04x}"),
             Instruction::STA(address) => write!(f, "STA ${address:04x}"),
+            Instruction::LHLD(address) => write!(f, "LHLD ${address:04x}"),
+            Instruction::SHLD(address) => write!(f, "SHLD ${address:04x}"),
         }
     }
 }

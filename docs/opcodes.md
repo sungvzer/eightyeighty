@@ -51,8 +51,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | LXI RP,# | 00RP0001 lb hb |   -   | Load register pair immediate          |   ✔️    |      ❌      |
 | LDA a    | 00111010 lb hb |   -   | Load A from memory                    |   ✔️    |      ❌      |
 | STA a    | 00110010 lb hb |   -   | Store A to memory                     |   ✔️    |      ❌      |
-| LHLD a   | 00101010 lb hb |   -   | Load H:L from memory                  |   ❌    |      ❌      |
-| SHLD a   | 00100010 lb hb |   -   | Store H:L to memory                   |   ❌    |      ❌      |
+| LHLD a   | 00101010 lb hb |   -   | Load H:L from memory                  |   ✔️    |      ❌      |
+| SHLD a   | 00100010 lb hb |   -   | Store H:L to memory                   |   ✔️    |      ❌      |
 | LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ❌    |      ❌      |
 | STAX RP  | 00RP0010 *1    |   -   | Store indirect through BC or DE       |   ❌    |      ❌      |
 | XCHG     | 11101011       |   -   | Exchange DE and HL content            |   ✔️    |      ❌      |
