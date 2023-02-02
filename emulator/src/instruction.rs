@@ -87,6 +87,12 @@ pub enum Instruction {
     /// OR immediate with A
     ORI(u8),
 
+    /// XOR register with A
+    XRA(Register),
+
+    /// XOR immediate with A
+    XRI(u8),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -168,11 +174,13 @@ impl Debug for Instruction {
             Instruction::SUI(imm) => write!(f, "SUI #${imm:02x}"),
             Instruction::ADC(src) => write!(f, "ADC {src}"),
             Instruction::ANA(src) => write!(f, "ANA {src}"),
+            Instruction::XRA(src) => write!(f, "XRA {src}"),
             Instruction::ORA(src) => write!(f, "ORA {src}"),
             Instruction::SBB(src) => write!(f, "SBB {src}"),
             Instruction::ACI(imm) => write!(f, "ACI #${imm:02x}"),
             Instruction::SBI(imm) => write!(f, "SBI #${imm:02x}"),
             Instruction::ANI(imm) => write!(f, "ANI #${imm:02x}"),
+            Instruction::XRI(imm) => write!(f, "XRI #${imm:02x}"),
             Instruction::ORI(imm) => write!(f, "ORI #${imm:02x}"),
             Instruction::MVI(dest, imm) => write!(f, "MVI {dest},#${imm:02x}"),
             Instruction::LXI(pair, imm) => write!(f, "LXI {pair},#${imm:04x}"),

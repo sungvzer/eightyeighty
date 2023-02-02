@@ -279,6 +279,19 @@ impl InstructionParser {
             return Some(Instruction::ORI(immediate));
         }
 
+        // Parse XRA instruction -> 10101SSS
+        if (opcode & 0xf8) == 0xa8 {
+            let src = src.try_into().unwrap();
+            return Some(Instruction::XRA(src));
+        }
+
+        // Parse XRI instruction -> 11101110
+        if *opcode == 0xee {
+            assert_eq!(bytes.len(), 2);
+            let immediate = bytes[1];
+            return Some(Instruction::XRI(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 
