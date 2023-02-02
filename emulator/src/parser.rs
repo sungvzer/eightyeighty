@@ -305,6 +305,13 @@ impl InstructionParser {
             return Some(Instruction::CPI(immediate));
         }
 
+        // Parse JMP instruction -> 11000011
+        if *opcode == 0xc3 {
+            assert_eq!(bytes.len(), 3);
+            let immediate = parse_low_high_byte(&bytes);
+            return Some(Instruction::JMP(immediate));
+        }
+
         Some(Instruction::Unknown)
     }
 

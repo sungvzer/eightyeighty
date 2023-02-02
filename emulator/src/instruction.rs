@@ -30,9 +30,6 @@ pub enum Instruction {
     /// Store indirect through BC or DE
     STAX(RegisterPair),
 
-    /// Unconditional jump
-    JMP(u16),
-
     /// Exchange DE and HL content
     XCHG,
 
@@ -123,6 +120,9 @@ pub enum Instruction {
     /// Set Carry flag
     STC,
 
+    /// Unconditional jump
+    JMP(u16),
+
     /// Unconditional return from subroutine
     RET,
 
@@ -154,7 +154,7 @@ impl Debug for Instruction {
         match self {
             Instruction::NOP => write!(f, "NOP"),
             Instruction::HLT => write!(f, "HLT"),
-            Instruction::JMP(arg0) => write!(f, "JMP $({:02x})", arg0),
+            Instruction::JMP(arg0) => write!(f, "JMP ${:02x}", arg0),
             Instruction::Unknown => write!(f, "Unknown"),
             Instruction::EI => write!(f, "EI"),
             Instruction::DI => write!(f, "DI"),

@@ -85,7 +85,7 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | CMA      | 00101111       |   -   | Compliment A                          |   ✔️    |      ❌      |
 | CMC      | 00111111       |   C   | Compliment Carry flag                 |   ✔️    |      ❌      |
 | STC      | 00110111       |   C   | Set Carry flag                        |   ✔️    |      ❌      |
-| JMP a    | 11000011 lb hb |   -   | Unconditional jump                    |   ❌    |      ❌      |
+| JMP a    | 11000011 lb hb |   -   | Unconditional jump                    |   ✔️    |      ❌      |
 | Jccc a   | 11CCC010 lb hb |   -   | Conditional jump                      |   ❌    |      ❌      |
 | CALL a   | 11001101 lb hb |   -   | Unconditional subroutine call         |   ❌    |      ❌      |
 | Cccc a   | 11CCC100 lb hb |   -   | Conditional subroutine call           |   ❌    |      ❌      |
