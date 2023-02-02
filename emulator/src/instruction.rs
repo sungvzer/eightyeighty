@@ -60,6 +60,12 @@ pub enum Instruction {
     /// Subtract immediate from A with borrow
     SBI(u8),
 
+    /// Increment register
+    INR(Register),
+
+    /// Decrement register
+    DCR(Register),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -134,6 +140,8 @@ impl Debug for Instruction {
             Instruction::RET => write!(f, "RET"),
             Instruction::MOV(dest, src) => write!(f, "MOV {dest},{src}"),
             Instruction::ADD(src) => write!(f, "ADD {src}"),
+            Instruction::INR(src) => write!(f, "INR {src}"),
+            Instruction::DCR(src) => write!(f, "DCR {src}"),
             Instruction::SUB(src) => write!(f, "SUB {src}"),
             Instruction::ADI(imm) => write!(f, "ADI #${imm:02x}"),
             Instruction::SUI(imm) => write!(f, "SUI #${imm:02x}"),

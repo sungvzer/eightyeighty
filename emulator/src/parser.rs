@@ -215,6 +215,17 @@ impl InstructionParser {
             return Some(Instruction::SBI(immediate));
         }
 
+        // Parse INR instruction -> 00DDD100
+        if (opcode & 0xc7) == 0x04 {
+            let dest = dest.try_into().unwrap();
+            return Some(Instruction::INR(dest));
+        }
+        // Parse DCR instruction -> 00DDD101
+        if (opcode & 0xc7) == 0x05 {
+            let dest = dest.try_into().unwrap();
+            return Some(Instruction::DCR(dest));
+        }
+
         Some(Instruction::Unknown)
     }
 
