@@ -244,6 +244,15 @@ impl InstructionParser {
             return Some(Instruction::DCX(register_pair.unwrap()));
         }
 
+        // Parse DAD instruction -> 00RP1001
+        if (opcode & 0xcf) == 0x09 {
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            return Some(Instruction::DAD(register_pair.unwrap()));
+        }
+
         Some(Instruction::Unknown)
     }
 

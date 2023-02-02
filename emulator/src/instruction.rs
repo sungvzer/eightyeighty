@@ -72,6 +72,9 @@ pub enum Instruction {
     /// Decrement register pair
     DCX(RegisterPair),
 
+    /// Add register pair to HL (16 bit add)
+    DAD(RegisterPair),
+
     /// Decimal Adjust Accumulator
     DAA,
 
@@ -165,6 +168,7 @@ impl Debug for Instruction {
             Instruction::STAX(pair) => write!(f, "STAX {pair}"),
             Instruction::INX(pair) => write!(f, "INX {pair}"),
             Instruction::DCX(pair) => write!(f, "DCX {pair}"),
+            Instruction::DAD(pair) => write!(f, "DAD {pair}"),
         }
     }
 }
