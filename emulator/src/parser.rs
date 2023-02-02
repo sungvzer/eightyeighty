@@ -36,9 +36,6 @@ impl InstructionParser {
 
     pub fn parse(&mut self) -> Option<Instruction> {
         let bytes = self.consume_next()?;
-        for byte in &bytes {
-            print!("0x{:02x} ", byte);
-        }
 
         let opcode = bytes.get(0)?;
 

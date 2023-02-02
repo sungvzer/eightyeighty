@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
 use crate::register::{Register, RegisterPair};
 
@@ -110,5 +110,11 @@ impl Debug for Instruction {
             Instruction::LHLD(address) => write!(f, "LHLD ${address:04x}"),
             Instruction::SHLD(address) => write!(f, "SHLD ${address:04x}"),
         }
+    }
+}
+
+impl Display for Instruction {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(&self, f)
     }
 }
