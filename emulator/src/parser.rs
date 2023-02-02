@@ -82,11 +82,13 @@ impl InstructionParser {
         let dest_mask: u8 = 0x38; // 0b00111000
         let src_mask: u8 = 0x07; // 0b00000111
 
+        // * Only use these when appropriate
+        let dest = (opcode & dest_mask) >> 3;
+        let src = opcode & src_mask;
+        let register_pair = (opcode & 0x30) >> 4;
+
         // Parse MOV instruction -> if top two bits are 01
         if (opcode & 0xc0) == 0x40 {
-            let dest = (opcode & dest_mask) >> 3;
-            let src = opcode & src_mask;
-
             let dest = dest.try_into().unwrap();
             let src = src.try_into().unwrap();
             return Some(Instruction::MOV(dest, src));
@@ -95,7 +97,6 @@ impl InstructionParser {
         // Parse MVI instruction -> 00DDD110
         if (opcode & 0xc0) == 0x00 && opcode & src_mask == 0x06 {
             assert_eq!(bytes.len(), 2);
-            let dest = (opcode & dest_mask) >> 3;
             let dest = dest.try_into().unwrap();
             return Some(Instruction::MVI(dest, bytes[1]));
         }
@@ -105,7 +106,6 @@ impl InstructionParser {
             assert_eq!(bytes.len(), 3);
             let immediate: u16 = parse_low_high_byte(&bytes);
 
-            let register_pair = (opcode & 0x30) >> 4;
             let register_pair = RegisterPair::try_from(register_pair);
             if register_pair.is_err() {
                 return None;
@@ -143,7 +143,6 @@ impl InstructionParser {
 
         // Parse LDAX instruction -> 00RP1010
         if (opcode & 0xc0) == 0x00 && opcode & 0x0f == 0x0a {
-            let register_pair = (opcode & 0x30) >> 4;
             let register_pair = RegisterPair::try_from(register_pair);
             if register_pair.is_err() {
                 return None;
@@ -155,7 +154,6 @@ impl InstructionParser {
 
         // Parse STAX instruction -> 00RP0010
         if (opcode & 0xc0) == 0x00 && opcode & 0x0f == 0x02 {
-            let register_pair = (opcode & 0x30) >> 4;
             let register_pair = RegisterPair::try_from(register_pair);
             if register_pair.is_err() {
                 return None;
@@ -167,7 +165,6 @@ impl InstructionParser {
 
         // Parse ADD instruction -> 10000SSS
         if (opcode & 0xf8) == 0x80 {
-            let src = opcode & src_mask;
             let src = src.try_into().unwrap();
             return Some(Instruction::ADD(src));
         }
@@ -181,7 +178,6 @@ impl InstructionParser {
 
         // Parse ADC instruction -> 10001SSS
         if (opcode & 0xf8) == 0x88 {
-            let src = opcode & src_mask;
             let src = src.try_into().unwrap();
             return Some(Instruction::ADC(src));
         }
