@@ -42,6 +42,7 @@ fn write_to_file(instructions: &Vec<Instruction>, path: PathBuf) -> Result<(), S
     let file = OpenOptions::new()
         .read(false)
         .write(true)
+        .create(true)
         .append(false)
         .open(path);
     if file.is_err() {
