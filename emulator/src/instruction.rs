@@ -1,6 +1,9 @@
 use std::fmt::{Debug, Display};
 
-use crate::register::{Register, RegisterPair};
+use crate::{
+    condition::Condition,
+    register::{Register, RegisterPair},
+};
 
 pub enum Instruction {
     /// Move register to register
@@ -123,6 +126,9 @@ pub enum Instruction {
     /// Unconditional jump
     JMP(u16),
 
+    /// Conditional jump
+    J(Condition, u16),
+
     /// Unconditional return from subroutine
     RET,
 
@@ -201,6 +207,7 @@ impl Debug for Instruction {
             Instruction::INX(pair) => write!(f, "INX {pair}"),
             Instruction::DCX(pair) => write!(f, "DCX {pair}"),
             Instruction::DAD(pair) => write!(f, "DAD {pair}"),
+            Instruction::J(condition, addr) => write!(f, "J{condition} ${addr:04x}"),
         }
     }
 }

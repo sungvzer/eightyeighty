@@ -1,4 +1,4 @@
-use crate::{instruction::Instruction, register::RegisterPair};
+use crate::{condition::Condition, instruction::Instruction, register::RegisterPair};
 
 pub struct InstructionParser {
     buffer: Vec<u8>,
@@ -310,6 +310,18 @@ impl InstructionParser {
             assert_eq!(bytes.len(), 3);
             let immediate = parse_low_high_byte(&bytes);
             return Some(Instruction::JMP(immediate));
+        }
+
+        // Parse Jccc instruction -> 11CCC010
+        if (*opcode & 0xc7) == 0xc2 {
+            assert_eq!(bytes.len(), 3);
+            let address = parse_low_high_byte(&bytes);
+
+            let condition = Condition::try_from(dest);
+            if condition.is_err() {
+                return None;
+            }
+            return Some(Instruction::J(condition.unwrap(), address));
         }
 
         Some(Instruction::Unknown)
