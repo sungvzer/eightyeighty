@@ -129,6 +129,12 @@ pub enum Instruction {
     /// Conditional jump
     J(Condition, u16),
 
+    /// Unconditional subroutine call
+    CALL(u16),
+
+    /// Conditional subroutine call
+    C(Condition, u16),
+
     /// Unconditional return from subroutine
     RET,
 
@@ -208,6 +214,8 @@ impl Debug for Instruction {
             Instruction::DCX(pair) => write!(f, "DCX {pair}"),
             Instruction::DAD(pair) => write!(f, "DAD {pair}"),
             Instruction::J(condition, addr) => write!(f, "J{condition} ${addr:04x}"),
+            Instruction::C(condition, addr) => write!(f, "C{condition} ${addr:04x}"),
+            Instruction::CALL(addr) => write!(f, "CALL ${addr:04x}"),
         }
     }
 }

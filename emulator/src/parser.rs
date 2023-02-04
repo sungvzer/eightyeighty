@@ -324,6 +324,25 @@ impl InstructionParser {
             return Some(Instruction::J(condition.unwrap(), address));
         }
 
+        // Parse CALL instruction -> 11001101
+        if *opcode == 0xcd {
+            assert_eq!(bytes.len(), 3);
+            let address = parse_low_high_byte(&bytes);
+            return Some(Instruction::CALL(address));
+        }
+
+        // Parse Cccc instruction -> 11CCC100
+        if (opcode & 0xc7) == 0xc4 {
+            assert_eq!(bytes.len(), 3);
+            let address = parse_low_high_byte(&bytes);
+
+            let condition = Condition::try_from(dest);
+            if condition.is_err() {
+                return None;
+            }
+            return Some(Instruction::C(condition.unwrap(), address));
+        }
+
         Some(Instruction::Unknown)
     }
 
