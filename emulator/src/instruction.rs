@@ -144,6 +144,12 @@ pub enum Instruction {
     /// Restart (Call n*8)
     RST(u8),
 
+    /// Push register pair on the stack
+    PUSH(RegisterPair),
+
+    /// Pop register pair on the stack
+    POP(RegisterPair),
+
     /// Jump to address in H:L
     PCHL,
 
@@ -218,6 +224,18 @@ impl Debug for Instruction {
             Instruction::LDAX(pair) => write!(f, "LDAX {pair}"),
             Instruction::STAX(pair) => write!(f, "STAX {pair}"),
             Instruction::INX(pair) => write!(f, "INX {pair}"),
+            Instruction::PUSH(pair) => {
+                if let RegisterPair::SP = pair {
+                    return write!(f, "PUSH PSW");
+                }
+                write!(f, "PUSH {pair}")
+            }
+            Instruction::POP(pair) => {
+                if let RegisterPair::SP = pair {
+                    return write!(f, "POP PSW");
+                }
+                write!(f, "POP {pair}")
+            }
             Instruction::DCX(pair) => write!(f, "DCX {pair}"),
             Instruction::DAD(pair) => write!(f, "DAD {pair}"),
             Instruction::J(condition, addr) => write!(f, "J{condition} ${addr:04x}"),

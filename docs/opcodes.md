@@ -93,8 +93,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | Rccc     | 11CCC000       |   -   | Conditional return from subroutine    |   ✔️    |      ❌      |
 | RST n    | 11NNN111       |   -   | Restart (Call n*8)                    |   ✔️    |      ❌      |
 | PCHL     | 11101001       |   -   | Jump to address in H:L                |   ✔️    |      ❌      |
-| PUSH RP  | 11RP0101 *2    |   -   | Push register pair on the stack       |   ❌    |      ❌      |
-| POP RP   | 11RP0001 *2    |  *2   | Pop  register pair from the stack     |   ❌    |      ❌      |
+| PUSH RP  | 11RP0101 *2    |   -   | Push register pair on the stack       |   ✔️    |      ❌      |
+| POP RP   | 11RP0001 *2    |  *2   | Pop  register pair from the stack     |   ✔️    |      ❌      |
 | XTHL     | 11100011       |   -   | Swap H:L with top word on stack       |   ✔️    |      ❌      |
 | SPHL     | 11111001       |   -   | Set SP to content of H:L              |   ✔️    |      ❌      |
 | IN p     | 11011011 pa    |   -   | Read input port into A                |   ❌    |      ❌      |

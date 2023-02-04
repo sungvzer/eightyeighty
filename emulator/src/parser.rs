@@ -359,6 +359,26 @@ impl InstructionParser {
             return Some(Instruction::RST(dest));
         }
 
+        // Parse PUSH instruction -> 11RP0101
+        if (opcode & 0xcf) == 0xc5 {
+            assert_eq!(bytes.len(), 1);
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            return Some(Instruction::PUSH(register_pair.unwrap()));
+        }
+
+        // Parse POP instruction -> 11RP0001
+        if (opcode & 0xcf) == 0xc1 {
+            assert_eq!(bytes.len(), 1);
+            let register_pair = RegisterPair::try_from(register_pair);
+            if register_pair.is_err() {
+                return None;
+            }
+            return Some(Instruction::POP(register_pair.unwrap()));
+        }
+
         Some(Instruction::Unknown)
     }
 
