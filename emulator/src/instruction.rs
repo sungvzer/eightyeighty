@@ -159,6 +159,12 @@ pub enum Instruction {
     /// Set SP to content of H:L
     SPHL,
 
+    /// Read input port into A
+    IN(u8),
+
+    /// Write A to output port
+    OUT(u8),
+
     /// Enable interrupt
     EI,
 
@@ -212,6 +218,8 @@ impl Debug for Instruction {
             Instruction::RST(n) => write!(f, "RST {n}"),
             Instruction::ACI(imm) => write!(f, "ACI #${imm:02x}"),
             Instruction::SBI(imm) => write!(f, "SBI #${imm:02x}"),
+            Instruction::IN(imm) => write!(f, "IN #${imm:02x}"),
+            Instruction::OUT(imm) => write!(f, "OUT #${imm:02x}"),
             Instruction::ANI(imm) => write!(f, "ANI #${imm:02x}"),
             Instruction::XRI(imm) => write!(f, "XRI #${imm:02x}"),
             Instruction::ORI(imm) => write!(f, "ORI #${imm:02x}"),

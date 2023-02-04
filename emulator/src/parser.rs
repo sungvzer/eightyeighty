@@ -379,6 +379,20 @@ impl InstructionParser {
             return Some(Instruction::POP(register_pair.unwrap()));
         }
 
+        // Parse IN instruction -> 11011011
+        if *opcode == 0xdb {
+            assert_eq!(bytes.len(), 2);
+            let port = bytes[1];
+            return Some(Instruction::IN(port));
+        }
+
+        // Parse OUT instruction -> 11010011
+        if *opcode == 0xd3 {
+            assert_eq!(bytes.len(), 2);
+            let port = bytes[1];
+            return Some(Instruction::OUT(port));
+        }
+
         Some(Instruction::Unknown)
     }
 

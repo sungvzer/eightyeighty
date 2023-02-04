@@ -97,8 +97,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | POP RP   | 11RP0001 *2    |  *2   | Pop  register pair from the stack     |   ✔️    |      ❌      |
 | XTHL     | 11100011       |   -   | Swap H:L with top word on stack       |   ✔️    |      ❌      |
 | SPHL     | 11111001       |   -   | Set SP to content of H:L              |   ✔️    |      ❌      |
-| IN p     | 11011011 pa    |   -   | Read input port into A                |   ❌    |      ❌      |
-| OUT p    | 11010011 pa    |   -   | Write A to output port                |   ❌    |      ❌      |
+| IN p     | 11011011 pa    |   -   | Read input port into A                |   ✔️    |      ❌      |
+| OUT p    | 11010011 pa    |   -   | Write A to output port                |   ✔️    |      ❌      |
 | EI       | 11111011       |   -   | Enable interrupts                     |   ✔️    |      ❌      |
 | DI       | 11110011       |   -   | Disable interrupts                    |   ✔️    |      ❌      |
 | HLT      | 01110110       |   -   | Halt processor                        |   ✔️    |      ❌      |
