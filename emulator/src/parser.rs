@@ -10,6 +10,10 @@ impl InstructionParser {
         InstructionParser { buffer, cursor: 0 }
     }
 
+    pub fn cursor(&self) -> usize {
+        self.cursor
+    }
+
     fn consume_next(&mut self) -> Option<Vec<u8>> {
         if self.cursor == self.buffer.len() {
             return None;

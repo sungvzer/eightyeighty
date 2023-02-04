@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-#[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Debug, Clone, Copy)]
 pub enum Condition {
     /// Zero flag not set
     NZ,

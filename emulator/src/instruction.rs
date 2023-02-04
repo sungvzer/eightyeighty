@@ -5,6 +5,7 @@ use crate::{
     register::{Register, RegisterPair},
 };
 
+#[derive(Clone, Copy)]
 pub enum Instruction {
     /// Move register to register
     MOV(Register, Register),

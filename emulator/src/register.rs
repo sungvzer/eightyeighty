@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+#[derive(Copy, Clone)]
 pub enum Register {
     A,
     B,
@@ -11,7 +12,7 @@ pub enum Register {
     M,
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub enum RegisterPair {
     /// B:C as 16 bit register
     BC,

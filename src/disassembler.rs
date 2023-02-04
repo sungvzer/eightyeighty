@@ -38,7 +38,7 @@ fn read_file(path: PathBuf) -> Result<Vec<u8>, String> {
     Ok(vec)
 }
 
-fn write_to_file(instructions: &Vec<Instruction>, path: PathBuf) -> Result<(), String> {
+fn write_to_file(instructions: &Vec<InstructionAndAddress>, path: PathBuf) -> Result<(), String> {
     let file = OpenOptions::new()
         .read(false)
         .write(true)
@@ -52,12 +52,21 @@ fn write_to_file(instructions: &Vec<Instruction>, path: PathBuf) -> Result<(), S
         ));
     }
     let mut file = file.unwrap();
-    for insn in instructions {
-        if let Err(err) = writeln!(file, "{insn}") {
+    for instruction_and_address in instructions {
+        if let Err(err) = writeln!(
+            file,
+            "{:04x} {}",
+            instruction_and_address.address, instruction_and_address.instruction
+        ) {
             return Err(format!("Could not write to file: {err}"));
         };
     }
     Ok(())
+}
+
+struct InstructionAndAddress {
+    pub address: usize,
+    pub instruction: Instruction,
 }
 
 fn main() {
@@ -76,15 +85,23 @@ fn main() {
 
     let mut instruction_vector = vec![];
 
+    let mut cursor = parser.cursor();
     while let Some(insn) = parser.parse() {
-        instruction_vector.push(insn);
+        instruction_vector.push(InstructionAndAddress {
+            address: cursor,
+            instruction: insn,
+        });
+
+        cursor = parser.cursor();
     }
 
     if let Some(path) = args.output {
         write_to_file(&instruction_vector, path).unwrap();
     } else {
         for insn in &instruction_vector {
-            println!("{insn}");
+            let addr = insn.address;
+            let instruction = insn.instruction;
+            println!("{addr:04x} {instruction}");
         }
     }
 }
