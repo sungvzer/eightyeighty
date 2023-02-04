@@ -141,6 +141,9 @@ pub enum Instruction {
     /// Conditional return from subroutine
     R(Condition),
 
+    /// Restart (Call n*8)
+    RST(u8),
+
     /// Jump to address in H:L
     PCHL,
 
@@ -200,6 +203,7 @@ impl Debug for Instruction {
             Instruction::XRA(src) => write!(f, "XRA {src}"),
             Instruction::ORA(src) => write!(f, "ORA {src}"),
             Instruction::SBB(src) => write!(f, "SBB {src}"),
+            Instruction::RST(n) => write!(f, "RST {n}"),
             Instruction::ACI(imm) => write!(f, "ACI #${imm:02x}"),
             Instruction::SBI(imm) => write!(f, "SBI #${imm:02x}"),
             Instruction::ANI(imm) => write!(f, "ANI #${imm:02x}"),

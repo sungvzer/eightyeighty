@@ -353,6 +353,12 @@ impl InstructionParser {
             return Some(Instruction::R(condition.unwrap()));
         }
 
+        // Parse RST instruction -> 11NNN111
+        if (opcode & 0xc7) == 0xc7 {
+            assert_eq!(bytes.len(), 1);
+            return Some(Instruction::RST(dest));
+        }
+
         Some(Instruction::Unknown)
     }
 
