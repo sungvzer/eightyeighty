@@ -446,9 +446,9 @@ impl InstructionParser {
             0x1f => 0, // RAR
 
             0x20 => 0, // NOP
+            0x21 => 2, // LXI H,d16
             0x22 => 2, // SHLD a16
             0x23 => 0, // INX H
-            0x21 => 2, // LXI H,d16
             0x24 => 0, // INR H
             0x25 => 0, // DCR h
             0x26 => 1, // MVI H,d8
@@ -458,12 +458,14 @@ impl InstructionParser {
             0x2a => 2, // LHLD a16
             0x2b => 0, // DCX H
             0x2c => 0, // INR L
+            0x2d => 0, // DCR L
             0x2e => 1, // MVI A,d8
             0x2f => 0, // CMA
 
             0x30 => 0, // NOP
             0x31 => 2, // LXI SP,d16
             0x32 => 2, // STA a16
+            0x33 => 0, // INX SP
             0x34 => 0, // INR M
             0x35 => 0, // DCR M
             0x36 => 1, // MVI M,d8
@@ -471,6 +473,7 @@ impl InstructionParser {
             0x38 => 0, // NOP
             0x39 => 0, // DAD SP
             0x3a => 2, // LDA a16
+            0x3b => 0, // DCX SP
             0x3c => 0, // INR A
             0x3d => 0, // DCR A
             0x3e => 1, // MVI A,d8
@@ -486,11 +489,15 @@ impl InstructionParser {
             0xc4 => 2, // CNZ a16
             0xc5 => 0, // PUSH B
             0xc6 => 1, // ADI d8
+            0xc7 => 0, // RST 0
             0xc8 => 0, // RZ
             0xc9 => 0, // RET
             0xca => 2, // JZ a16
-            0xcd => 2, // CALL a16
+            0xcb => 2, // JMP a16
             0xcc => 2, // CZ a16
+            0xcd => 2, // CALL a16
+            0xce => 1, // ACI d8
+            0xcf => 1, // RST 1
 
             0xd0 => 0, // RNC
             0xd1 => 0, // POP D
@@ -499,31 +506,48 @@ impl InstructionParser {
             0xd4 => 2, // CNC a16
             0xd5 => 0, // PUSH D
             0xd6 => 1, // SUI d8
+            0xd7 => 0, // RST 2
             0xd8 => 0, // RC
+            0xd9 => 0, // RET
             0xda => 2, // JC a16
             0xdb => 1, // IN d8
+            0xdc => 2, // CC a16
+            0xdd => 2, // CALL a16
             0xde => 1, // SBI d8
+            0xdf => 0, // RST 3
 
             0xe0 => 0, // RPO
             0xe1 => 0, // POP H
-            0xe3 => 0, // XTHL
             0xe2 => 2, // JPO a16
+            0xe3 => 0, // XTHL
+            0xe4 => 2, // CPO a16
             0xe5 => 0, // PUSH H
             0xe6 => 1, // ANI d8
+            0xe7 => 0, // RST 4
+            0xe8 => 0, // RPE
             0xe9 => 0, // PCHL
+            0xea => 2, // JPE a16
             0xeb => 0, // XCHG
-            0xeC => 2, // CPE a16
+            0xec => 2, // CPE a16
+            0xed => 2, // CALL a16
             0xee => 1, // XRI d8
+            0xef => 0, // RST 5
 
             0xf0 => 0, // RP
             0xf1 => 0, // POP PSW
+            0xf2 => 2, // JP a16
+            0xf3 => 0, // DI
+            0xf4 => 2, // CP a16
             0xf5 => 0, // PUSH PSW
+            0xf6 => 1, // ORI d8
+            0xf7 => 0, // RST 6
+            0xf8 => 0, // RM
+            0xf9 => 0, // SPHL
             0xfa => 2, // JM a16
             0xfb => 0, // EI
             0xfc => 2, // CM a16
+            0xfd => 2, // CALL a16
             0xfe => 1, // CPI d8
-            0xf6 => 1, // ORI d8
-            0xf8 => 0, // RM
             0xff => 0, // RST 7
 
             _ => todo!("Determine 0x{:02x} size", current_byte),
