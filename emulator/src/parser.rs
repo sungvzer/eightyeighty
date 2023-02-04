@@ -26,7 +26,7 @@ impl InstructionParser {
         bytes.push(current_byte);
         let number_of_bytes_to_read = self.bytes_to_read(current_byte);
 
-        if self.cursor >= self.buffer.len() - number_of_bytes_to_read {
+        if self.cursor > self.buffer.len() - number_of_bytes_to_read {
             return None;
         }
 
