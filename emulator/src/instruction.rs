@@ -138,6 +138,9 @@ pub enum Instruction {
     /// Unconditional return from subroutine
     RET,
 
+    /// Conditional return from subroutine
+    R(Condition),
+
     /// Jump to address in H:L
     PCHL,
 
@@ -215,6 +218,7 @@ impl Debug for Instruction {
             Instruction::DAD(pair) => write!(f, "DAD {pair}"),
             Instruction::J(condition, addr) => write!(f, "J{condition} ${addr:04x}"),
             Instruction::C(condition, addr) => write!(f, "C{condition} ${addr:04x}"),
+            Instruction::R(condition) => write!(f, "R{condition}"),
             Instruction::CALL(addr) => write!(f, "CALL ${addr:04x}"),
         }
     }

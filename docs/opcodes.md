@@ -90,7 +90,7 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | CALL a   | 11001101 lb hb |   -   | Unconditional subroutine call         |   ✔️    |      ❌      |
 | Cccc a   | 11CCC100 lb hb |   -   | Conditional subroutine call           |   ✔️    |      ❌      |
 | RET      | 11001001       |   -   | Unconditional return from subroutine  |   ✔️    |      ❌      |
-| Rccc     | 11CCC000       |   -   | Conditional return from subroutine    |   ❌    |      ❌      |
+| Rccc     | 11CCC000       |   -   | Conditional return from subroutine    |   ✔️    |      ❌      |
 | RST n    | 11NNN111       |   -   | Restart (Call n*8)                    |   ❌    |      ❌      |
 | PCHL     | 11101001       |   -   | Jump to address in H:L                |   ✔️    |      ❌      |
 | PUSH RP  | 11RP0101 *2    |   -   | Push register pair on the stack       |   ❌    |      ❌      |

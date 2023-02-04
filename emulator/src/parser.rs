@@ -343,6 +343,16 @@ impl InstructionParser {
             return Some(Instruction::C(condition.unwrap(), address));
         }
 
+        // Parse Rccc instruction -> 11CCC000
+        if (opcode & 0xc7) == 0xc0 {
+            assert_eq!(bytes.len(), 1);
+            let condition = Condition::try_from(dest);
+            if condition.is_err() {
+                return None;
+            }
+            return Some(Instruction::R(condition.unwrap()));
+        }
+
         Some(Instruction::Unknown)
     }
 
