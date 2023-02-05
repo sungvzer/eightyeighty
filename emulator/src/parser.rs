@@ -24,7 +24,7 @@ impl InstructionParser {
         self.cursor += 1;
 
         bytes.push(current_byte);
-        let number_of_bytes_to_read = self.bytes_to_read(current_byte);
+        let number_of_bytes_to_read = Self::bytes_to_read(current_byte);
 
         if self.cursor > self.buffer.len() - number_of_bytes_to_read {
             return None;
@@ -38,9 +38,7 @@ impl InstructionParser {
         Some(bytes)
     }
 
-    pub fn parse(&mut self) -> Option<Instruction> {
-        let bytes = self.consume_next()?;
-
+    pub fn parse_bytes(bytes: &[u8]) -> Option<Instruction> {
         let opcode = bytes.get(0)?;
 
         // Trivial opcodes
@@ -400,12 +398,17 @@ impl InstructionParser {
         Some(Instruction::Unknown)
     }
 
+    pub fn parse(&mut self) -> Option<Instruction> {
+        let bytes = self.consume_next()?;
+        Self::parse_bytes(&bytes)
+    }
+
     /**
     Returns the number of bytes to read **after** the current byte.
 
     The number is taken from the `size` column in the **opcodes.md** doc file minus 1.
     */
-    fn bytes_to_read(&self, current_byte: u8) -> usize {
+    pub fn bytes_to_read(current_byte: u8) -> usize {
         if current_byte >= 0x40 && current_byte <= 0xbf {
             // From 0x40 to 0xbf all instructions are 1 byte long
             return 0;
