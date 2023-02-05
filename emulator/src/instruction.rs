@@ -148,7 +148,7 @@ pub enum Instruction {
     /// Push register pair on the stack
     PUSH(RegisterPair),
 
-    /// Pop register pair on the stack
+    /// Pop register pair from the stack
     POP(RegisterPair),
 
     /// Jump to address in H:L

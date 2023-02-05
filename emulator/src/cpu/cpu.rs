@@ -1,16 +1,29 @@
 use log::trace;
 
-use crate::{instruction::Instruction, parser::InstructionParser, register::Register};
+use crate::{
+    condition::Condition,
+    instruction::Instruction,
+    parser::InstructionParser,
+    register::{Register, RegisterPair},
+};
 
 pub struct CPU {
     /// Registers stored in this order:
     ///
     /// `[Flags, A, C, B, E, D, L, H]`
     registers: [u8; 8],
-    _stack_pointer: u16,
+    stack_pointer: u16,
     program_counter: u16,
-    _status: u8,
     memory: Vec<u8>,
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+enum FlagMask {
+    S = 0x80,
+    Z = 0x40,
+    _A = 0x10,
+    P = 0x04,
+    C = 0x01,
 }
 
 impl CPU {
@@ -19,9 +32,8 @@ impl CPU {
         memory.resize(1024 * 64, 0);
         CPU {
             registers: [0; 8],
-            _stack_pointer: 0,
+            stack_pointer: 0xffff,
             program_counter: 0,
-            _status: 0,
             memory,
         }
     }
@@ -43,14 +55,14 @@ impl CPU {
         }
     }
 
-    pub fn register(&self, register: Register) -> u8 {
+    fn register(&self, register: Register) -> u8 {
         if register == Register::M {
             todo!("Read from memory");
         }
         self.registers[self.register_to_internal_index(register)]
     }
 
-    pub fn set_register(&mut self, register: Register, value: u8) {
+    fn set_register(&mut self, register: Register, value: u8) {
         if register == Register::M {
             todo!("Write memory");
         }
@@ -61,6 +73,101 @@ impl CPU {
         for (index, value) in program.iter().enumerate() {
             self.memory[index] = *value;
         }
+    }
+
+    fn stack_push(&mut self, value: u16) {
+        let high_byte = (value & 0xff00 >> 8) as u8;
+        let low_byte = (value & 0x00ff) as u8;
+        let stack_pointer = self.stack_pointer as usize;
+        self.memory[stack_pointer - 1] = high_byte;
+        self.memory[stack_pointer - 2] = low_byte;
+        self.stack_pointer -= 2;
+    }
+
+    fn stack_pop(&mut self) -> u16 {
+        let low_byte = self.memory[self.stack_pointer as usize] as u16;
+        let high_byte = self.memory[(self.stack_pointer + 1) as usize] as u16;
+
+        let value: u16 = (high_byte << 8) + low_byte;
+        self.stack_pointer += 2;
+        value
+    }
+
+    fn set_register_pair(&mut self, pair: RegisterPair, value: u16, insn: &Instruction) {
+        match pair {
+            RegisterPair::SP => match insn {
+                Instruction::POP(_) | Instruction::PUSH(_) => {
+                    todo!("Set PSW to #${value:04x}");
+                }
+                _ => {
+                    self.stack_pointer = value;
+                }
+            },
+            _ => todo!("Set register pair {pair} to #${value:04x}"),
+        };
+    }
+
+    fn get_flag(&self, flag_mask: FlagMask) -> bool {
+        (self.registers[0] & flag_mask as u8) != 0
+    }
+
+    fn verify_condition(&self, condition: Condition) -> bool {
+        match condition {
+            Condition::NZ => !self.get_flag(FlagMask::Z),
+            Condition::Z => self.get_flag(FlagMask::Z),
+            Condition::NC => !self.get_flag(FlagMask::C),
+            Condition::C => self.get_flag(FlagMask::C),
+            Condition::PO => !self.get_flag(FlagMask::P),
+            Condition::PE => self.get_flag(FlagMask::P),
+            Condition::P => !self.get_flag(FlagMask::S),
+            Condition::M => self.get_flag(FlagMask::S),
+        }
+    }
+
+    fn set_flag(&mut self, flag_mask: FlagMask) {
+        let flag_byte = &mut self.registers[0];
+
+        *flag_byte |= flag_mask as u8;
+    }
+
+    fn unset_flag(&mut self, flag_mask: FlagMask) {
+        let flag_byte = &mut self.registers[0];
+
+        *flag_byte &= 0xff - flag_mask as u8;
+    }
+
+    fn update_flags(&mut self, value: u8) {
+        // Zero flag
+        if value == 0 {
+            self.set_flag(FlagMask::Z);
+        } else {
+            self.unset_flag(FlagMask::Z);
+        }
+
+        // Sign flag
+        if (value & 0x80) != 0 {
+            self.set_flag(FlagMask::S);
+        } else {
+            self.unset_flag(FlagMask::S);
+        }
+
+        // Parity flag
+        let mut bits: u8 = 0;
+        let mut mask = 0x01;
+        for _ in 0..8 {
+            if value & mask != 0 {
+                bits += 1;
+            }
+            mask <<= 1;
+        }
+
+        if bits % 2 == 0 {
+            self.set_flag(FlagMask::P);
+        } else {
+            self.unset_flag(FlagMask::P);
+        }
+
+        // TODO: set auxiliary carry
     }
 
     pub fn fetch_decode_execute(&mut self) {
@@ -87,6 +194,34 @@ impl CPU {
             Instruction::JMP(addr) => {
                 self.program_counter = addr;
                 return;
+            }
+            Instruction::LXI(register_pair, immediate) => {
+                self.set_register_pair(register_pair, immediate, &insn)
+            }
+            Instruction::MVI(register, immediate) => {
+                self.set_register(register, immediate);
+            }
+            Instruction::CPI(immediate) => {
+                let result = self.register(Register::A).wrapping_sub(immediate);
+                self.update_flags(result);
+            }
+            Instruction::J(condition, addr) => {
+                if self.verify_condition(condition) {
+                    self.program_counter = addr;
+                    return;
+                }
+            }
+            Instruction::POP(pair) => {
+                let value = self.stack_pop();
+                self.set_register_pair(pair, value, &insn);
+            }
+            Instruction::CALL(addr) => {
+                self.stack_push(self.program_counter);
+                self.program_counter = addr;
+                return;
+            }
+            Instruction::RET => {
+                self.program_counter = self.stack_pop();
             }
             _ => todo!("Implement instruction {}", insn),
         };

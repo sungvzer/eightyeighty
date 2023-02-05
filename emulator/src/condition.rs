@@ -23,7 +23,7 @@ pub enum Condition {
     /// Sign flag not set (positive)
     P,
 
-    /// Sign flat set (minus)
+    /// Sign flag set (minus)
     M,
 }
 
