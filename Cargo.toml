@@ -12,5 +12,10 @@ path = "src/disassembler.rs"
 [dependencies]
 clap = { version = "^4.1.4", features = ["derive"] }
 
+# Logging
+log = "^0.4.17"
+fern = { version = "^0.6.1", features = ["colored"] }
+chrono = "^0.4.23"
+
 [dependencies.emulator]
 path = "./emulator"

@@ -1,3 +1,5 @@
+use log::trace;
+
 use crate::{instruction::Instruction, parser::InstructionParser, register::Register};
 
 pub struct CPU {
@@ -79,6 +81,7 @@ impl CPU {
 
         // Execute
         let instruction_size = bytes_to_read + 1;
+        trace!("Executing: {insn}");
         match insn {
             Instruction::NOP => {}
             Instruction::JMP(addr) => {

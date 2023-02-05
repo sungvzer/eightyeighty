@@ -1,9 +1,12 @@
 #![deny(clippy::all)]
 
-use std::{fs::OpenOptions, io::Read, path::PathBuf};
+mod logs;
+use std::{fs::OpenOptions, io::Read, path::PathBuf, str::FromStr};
 
 use clap::Parser;
 use emulator::cpu::CPU;
+use log::trace;
+use logs::log_init;
 
 #[derive(Parser)]
 struct Arguments {
@@ -12,6 +15,18 @@ struct Arguments {
 }
 
 fn main() {
+    let log_level = std::env::var("LOG_LEVEL").unwrap_or("info".to_owned());
+    let level = log::Level::from_str(&log_level).unwrap_or(log::Level::Info);
+
+    match log_init(level) {
+        Ok(_) => {
+            trace!("Initialized logging");
+        }
+        Err(err) => {
+            panic!("Could not initialize logger: {err}")
+        }
+    };
+
     let arguments = Arguments::parse();
     let file = arguments.file;
 
