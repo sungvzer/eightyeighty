@@ -1,3 +1,5 @@
+use std::ops::BitAnd;
+
 use log::trace;
 
 use crate::{
@@ -102,7 +104,7 @@ impl CPU {
         let (high_register, low_register) = match pair {
             RegisterPair::SP => match insn {
                 Instruction::POP(_) | Instruction::PUSH(_) => {
-                    todo!("Get PSW ");
+                    todo!("Get PSW");
                 }
                 _ => {
                     return self.stack_pointer;
@@ -111,7 +113,6 @@ impl CPU {
             RegisterPair::DE => (Register::D, Register::E),
             RegisterPair::HL => (Register::H, Register::L),
             RegisterPair::BC => (Register::B, Register::C),
-            _ => todo!("Get register pair {pair} "),
         };
 
         let low_byte = self.register(low_register, insn) as u16;
@@ -137,7 +138,6 @@ impl CPU {
             RegisterPair::DE => (Register::D, Register::E),
             RegisterPair::HL => (Register::H, Register::L),
             RegisterPair::BC => (Register::B, Register::C),
-            _ => todo!("Set register pair {pair} to #${value:04x}"),
         };
         self.set_register(high_register, high_byte, insn);
         self.set_register(low_register, low_byte, insn);
@@ -277,6 +277,12 @@ impl CPU {
                 let result = value.wrapping_sub(1);
                 self.update_flags(result);
                 self.set_register(register, result, &insn);
+            }
+            Instruction::ANI(immediate) => {
+                let value = self.register(Register::A, &insn);
+                let result = value.bitand(immediate);
+                self.update_flags(result);
+                self.set_register(Register::A, result, &insn);
             }
             _ => todo!("Implement instruction {}", insn),
         };
