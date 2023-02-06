@@ -65,8 +65,8 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | SBB S    | 10011SSS       | ZSCPA | Subtract register from A with borrow  |   ✔️    |      ❌      |
 | SBI #    | 11011110 db    | ZSCPA | Subtract immediate from A with borrow |   ✔️    |      ❌      |
 | INR D    | 00DDD100       | ZSPA  | Increment register                    |   ✔️    |      ❌      |
-| DCR D    | 00DDD101       | ZSPA  | Decrement register                    |   ✔️    |      ❌      |
-| INX RP   | 00RP0011       |   -   | Increment register pair               |   ✔️    |      ❌      |
+| DCR D    | 00DDD101       | ZSPA  | Decrement register                    |   ✔️    |      ✔️      |
+| INX RP   | 00RP0011       |   -   | Increment register pair               |   ✔️    |      ✔️      |
 | DCX RP   | 00RP1011       |   -   | Decrement register pair               |   ✔️    |      ❌      |
 | DAD RP   | 00RP1001       |   C   | Add register pair to HL (16 bit add)  |   ✔️    |      ❌      |
 | DAA      | 00100111       | ZSPCA | Decimal Adjust accumulator            |   ✔️    |      ❌      |

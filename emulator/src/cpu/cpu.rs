@@ -266,6 +266,16 @@ impl CPU {
                 let src_value = self.register(src, &insn);
                 self.set_register(dest, src_value, &insn);
             }
+            Instruction::INX(pair) => {
+                let value = self.get_register_pair(pair, &insn);
+                self.set_register_pair(pair, value.wrapping_add(1), &insn);
+            }
+            Instruction::DCR(register) => {
+                let value = self.register(register, &insn);
+                let result = value.wrapping_sub(1);
+                self.update_flags(result);
+                self.set_register(register, result, &insn);
+            }
             _ => todo!("Implement instruction {}", insn),
         };
         self.program_counter += instruction_size as u16;
