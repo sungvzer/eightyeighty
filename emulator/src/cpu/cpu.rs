@@ -59,7 +59,7 @@ impl CPU {
 
     fn register(&self, register: Register, insn: &Instruction) -> u8 {
         if register == Register::M {
-            let addr = self.get_register_pair(RegisterPair::HL, insn);
+            let addr = self.register_pair(RegisterPair::HL, insn);
             return self.memory[addr as usize];
         }
         self.registers[self.register_to_internal_index(register)]
@@ -67,7 +67,7 @@ impl CPU {
 
     fn set_register(&mut self, register: Register, value: u8, insn: &Instruction) {
         if register == Register::M {
-            let addr = self.get_register_pair(RegisterPair::HL, insn);
+            let addr = self.register_pair(RegisterPair::HL, insn);
             self.memory[addr as usize] = value;
             return;
         }
@@ -100,7 +100,7 @@ impl CPU {
         value
     }
 
-    fn get_register_pair(&self, pair: RegisterPair, insn: &Instruction) -> u16 {
+    fn register_pair(&self, pair: RegisterPair, insn: &Instruction) -> u16 {
         let (high_register, low_register) = match pair {
             RegisterPair::SP => match insn {
                 Instruction::POP(_) | Instruction::PUSH(_) => {
@@ -261,7 +261,7 @@ impl CPU {
             }
             Instruction::LDAX(pair) => {
                 assert!(pair == RegisterPair::BC || pair == RegisterPair::DE);
-                let address = self.get_register_pair(pair, &insn);
+                let address = self.register_pair(pair, &insn);
                 self.set_register(Register::A, self.memory[address as usize], &insn);
             }
             Instruction::MOV(dest, src) => {
@@ -269,7 +269,7 @@ impl CPU {
                 self.set_register(dest, src_value, &insn);
             }
             Instruction::INX(pair) => {
-                let value = self.get_register_pair(pair, &insn);
+                let value = self.register_pair(pair, &insn);
                 self.set_register_pair(pair, value.wrapping_add(1), &insn);
             }
             Instruction::DCR(register) => {
@@ -283,6 +283,10 @@ impl CPU {
                 let result = value.bitand(immediate);
                 self.update_flags(result);
                 self.set_register(Register::A, result, &insn);
+            }
+            Instruction::PUSH(pair) => {
+                let value = self.register_pair(pair, &insn);
+                self.stack_push(value);
             }
             _ => todo!("Implement instruction {}", insn),
         };
