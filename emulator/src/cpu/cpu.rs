@@ -172,7 +172,7 @@ impl CPU {
         *flag_byte &= 0xff - flag_mask as u8;
     }
 
-    fn update_flags(&mut self, value: u8) {
+    fn update_flags_u8(&mut self, value: u8) {
         // Zero flag
         if value == 0 {
             self.set_flag(FlagMask::Z);
@@ -202,8 +202,38 @@ impl CPU {
         } else {
             self.unset_flag(FlagMask::P);
         }
+    }
 
-        // TODO: set auxiliary carry
+    fn update_flags_u16(&mut self, value: u16) {
+        // Zero flag
+        if value == 0 {
+            self.set_flag(FlagMask::Z);
+        } else {
+            self.unset_flag(FlagMask::Z);
+        }
+
+        // Sign flag
+        if (value & 0x8000) != 0 {
+            self.set_flag(FlagMask::S);
+        } else {
+            self.unset_flag(FlagMask::S);
+        }
+
+        // Parity flag
+        let mut bits: u8 = 0;
+        let mut mask = 0x01;
+        for _ in 0..16 {
+            if value & mask != 0 {
+                bits += 1;
+            }
+            mask <<= 1;
+        }
+
+        if bits % 2 == 0 {
+            self.set_flag(FlagMask::P);
+        } else {
+            self.unset_flag(FlagMask::P);
+        }
     }
 
     pub fn fetch_decode_execute(&mut self) {
@@ -239,7 +269,7 @@ impl CPU {
             }
             Instruction::CPI(immediate) => {
                 let result = self.register(Register::A, &insn).wrapping_sub(immediate);
-                self.update_flags(result);
+                self.update_flags_u8(result);
             }
             Instruction::J(condition, addr) => {
                 if self.verify_condition(condition) {
@@ -275,18 +305,32 @@ impl CPU {
             Instruction::DCR(register) => {
                 let value = self.register(register, &insn);
                 let result = value.wrapping_sub(1);
-                self.update_flags(result);
+                self.update_flags_u8(result);
                 self.set_register(register, result, &insn);
             }
             Instruction::ANI(immediate) => {
                 let value = self.register(Register::A, &insn);
                 let result = value.bitand(immediate);
-                self.update_flags(result);
+                self.update_flags_u8(result);
                 self.set_register(Register::A, result, &insn);
             }
             Instruction::PUSH(pair) => {
                 let value = self.register_pair(pair, &insn);
                 self.stack_push(value);
+            }
+            Instruction::DAD(pair) => {
+                let dest = self.register_pair(RegisterPair::HL, &insn) as u32;
+                let src = self.register_pair(pair, &insn) as u32;
+
+                let result = dest + src;
+                if result & 0x10000 != 0 {
+                    self.set_flag(FlagMask::C);
+                } else {
+                    self.unset_flag(FlagMask::C);
+                }
+
+                let result = (result & 0x0000ffff) as u16;
+                self.set_register_pair(RegisterPair::HL, result, &insn);
             }
             _ => todo!("Implement instruction {}", insn),
         };

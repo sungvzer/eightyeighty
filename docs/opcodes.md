@@ -68,7 +68,7 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | DCR D    | 00DDD101       | ZSPA  | Decrement register                    |   ✔️    |      ✔️      |
 | INX RP   | 00RP0011       |   -   | Increment register pair               |   ✔️    |      ✔️      |
 | DCX RP   | 00RP1011       |   -   | Decrement register pair               |   ✔️    |      ❌      |
-| DAD RP   | 00RP1001       |   C   | Add register pair to HL (16 bit add)  |   ✔️    |      ❌      |
+| DAD RP   | 00RP1001       |   C   | Add register pair to HL (16 bit add)  |   ✔️    |      ✔️      |
 | DAA      | 00100111       | ZSPCA | Decimal Adjust accumulator            |   ✔️    |      ❌      |
 | ANA S    | 10100SSS       | ZSCPA | AND register with A                   |   ✔️    |      ❌      |
 | ANI #    | 11100110 db    | ZSPCA | AND immediate with A                  |   ✔️    |      ✔️      |
