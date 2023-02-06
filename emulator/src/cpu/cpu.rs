@@ -55,16 +55,19 @@ impl CPU {
         }
     }
 
-    fn register(&self, register: Register) -> u8 {
+    fn register(&self, register: Register, insn: &Instruction) -> u8 {
         if register == Register::M {
-            todo!("Read from memory");
+            let addr = self.get_register_pair(RegisterPair::HL, insn);
+            return self.memory[addr as usize];
         }
         self.registers[self.register_to_internal_index(register)]
     }
 
-    fn set_register(&mut self, register: Register, value: u8) {
+    fn set_register(&mut self, register: Register, value: u8, insn: &Instruction) {
         if register == Register::M {
-            todo!("Write memory");
+            let addr = self.get_register_pair(RegisterPair::HL, insn);
+            self.memory[addr as usize] = value;
+            return;
         }
         self.registers[self.register_to_internal_index(register)] = value;
     }
@@ -109,8 +112,8 @@ impl CPU {
             _ => todo!("Get register pair {pair} "),
         };
 
-        let low_byte = self.register(low_register) as u16;
-        let high_byte = self.register(high_register) as u16;
+        let low_byte = self.register(low_register, insn) as u16;
+        let high_byte = self.register(high_register, insn) as u16;
         ((high_byte << 8) | low_byte).into()
     }
 
@@ -134,8 +137,8 @@ impl CPU {
             RegisterPair::BC => (Register::B, Register::C),
             _ => todo!("Set register pair {pair} to #${value:04x}"),
         };
-        self.set_register(high_register, high_byte);
-        self.set_register(low_register, low_byte);
+        self.set_register(high_register, high_byte, insn);
+        self.set_register(low_register, low_byte, insn);
     }
 
     fn get_flag(&self, flag_mask: FlagMask) -> bool {
@@ -230,10 +233,10 @@ impl CPU {
                 self.set_register_pair(register_pair, immediate, &insn)
             }
             Instruction::MVI(register, immediate) => {
-                self.set_register(register, immediate);
+                self.set_register(register, immediate, &insn);
             }
             Instruction::CPI(immediate) => {
-                let result = self.register(Register::A).wrapping_sub(immediate);
+                let result = self.register(Register::A, &insn).wrapping_sub(immediate);
                 self.update_flags(result);
             }
             Instruction::J(condition, addr) => {
@@ -257,7 +260,11 @@ impl CPU {
             Instruction::LDAX(pair) => {
                 assert!(pair == RegisterPair::BC || pair == RegisterPair::DE);
                 let address = self.get_register_pair(pair, &insn);
-                self.set_register(Register::A, self.memory[address as usize]);
+                self.set_register(Register::A, self.memory[address as usize], &insn);
+            }
+            Instruction::MOV(dest, src) => {
+                let src_value = self.register(src, &insn);
+                self.set_register(dest, src_value, &insn);
             }
             _ => todo!("Implement instruction {}", insn),
         };
