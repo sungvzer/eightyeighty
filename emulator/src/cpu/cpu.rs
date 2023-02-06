@@ -332,6 +332,13 @@ impl CPU {
                 let result = (result & 0x0000ffff) as u16;
                 self.set_register_pair(RegisterPair::HL, result, &insn);
             }
+
+            Instruction::XCHG => {
+                let de = self.register_pair(RegisterPair::DE, &insn);
+                let hl = self.register_pair(RegisterPair::HL, &insn);
+                self.set_register_pair(RegisterPair::DE, hl, &insn);
+                self.set_register_pair(RegisterPair::HL, de, &insn);
+            }
             _ => todo!("Implement instruction {}", insn),
         };
         self.program_counter += instruction_size as u16;
