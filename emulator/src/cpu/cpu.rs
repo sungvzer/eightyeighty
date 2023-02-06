@@ -94,17 +94,27 @@ impl CPU {
     }
 
     fn set_register_pair(&mut self, pair: RegisterPair, value: u16, insn: &Instruction) {
-        match pair {
+        // TODO: Verify that this function handles endianness correctly
+        let low_byte = (value & 0x00ff) as u8;
+        let high_byte = (value & 0xff00 >> 8) as u8;
+
+        let (high_register, low_register) = match pair {
             RegisterPair::SP => match insn {
                 Instruction::POP(_) | Instruction::PUSH(_) => {
                     todo!("Set PSW to #${value:04x}");
                 }
                 _ => {
                     self.stack_pointer = value;
+                    return;
                 }
             },
+            RegisterPair::DE => (Register::D, Register::E),
+            RegisterPair::HL => (Register::H, Register::L),
+            RegisterPair::BC => (Register::B, Register::C),
             _ => todo!("Set register pair {pair} to #${value:04x}"),
         };
+        self.set_register(high_register, high_byte);
+        self.set_register(low_register, low_byte);
     }
 
     fn get_flag(&self, flag_mask: FlagMask) -> bool {
