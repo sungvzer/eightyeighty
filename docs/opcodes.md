@@ -46,14 +46,14 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 
 | Inst     | Encoding       | Flags | Description                           | Parsed | Implemented |
 | -------- | -------------- | :---: | ------------------------------------- | :----: | :---------: |
-| MOV D,S  | 01DDDSSS       |   -   | Move register to register             |   ✔️    |      ❌      |
-| MVI D,#  | 00DDD110 db    |   -   | Move immediate to register            |   ✔️    |      ❌      |
-| LXI RP,# | 00RP0001 lb hb |   -   | Load register pair immediate          |   ✔️    |      ❌      |
+| MOV D,S  | 01DDDSSS       |   -   | Move register to register             |   ✔️    |      ✔️      |
+| MVI D,#  | 00DDD110 db    |   -   | Move immediate to register            |   ✔️    |      ✔️      |
+| LXI RP,# | 00RP0001 lb hb |   -   | Load register pair immediate          |   ✔️    |      ✔️      |
 | LDA a    | 00111010 lb hb |   -   | Load A from memory                    |   ✔️    |      ❌      |
 | STA a    | 00110010 lb hb |   -   | Store A to memory                     |   ✔️    |      ❌      |
 | LHLD a   | 00101010 lb hb |   -   | Load H:L from memory                  |   ✔️    |      ❌      |
 | SHLD a   | 00100010 lb hb |   -   | Store H:L to memory                   |   ✔️    |      ❌      |
-| LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ✔️    |      ❌      |
+| LDAX RP  | 00RP1010 *1    |   -   | Load indirect through BC or DE        |   ✔️    |      ✔️      |
 | STAX RP  | 00RP0010 *1    |   -   | Store indirect through BC or DE       |   ✔️    |      ❌      |
 | XCHG     | 11101011       |   -   | Exchange DE and HL content            |   ✔️    |      ❌      |
 | ADD S    | 10000SSS       | ZSPCA | Add register to A                     |   ✔️    |      ❌      |
@@ -77,7 +77,7 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | XRA S    | 10101SSS       | ZSPCA | XOR register with A                   |   ✔️    |      ❌      |
 | XRI #    | 11101110 db    | ZSPCA | XOR immediate with A                  |   ✔️    |      ❌      |
 | CMP S    | 10111SSS       | ZSPCA | Compare register with A               |   ✔️    |      ❌      |
-| CPI #    | 11111110 db    | ZSPCA | Compare immediate with A              |   ✔️    |      ❌      |
+| CPI #    | 11111110 db    | ZSPCA | Compare immediate with A              |   ✔️    |      ✔️      |
 | RLC      | 00000111       |   C   | Rotate A left                         |   ✔️    |      ❌      |
 | RRC      | 00001111       |   C   | Rotate A right                        |   ✔️    |      ❌      |
 | RAL      | 00010111       |   C   | Rotate A left through carry           |   ✔️    |      ❌      |
@@ -86,15 +86,15 @@ Condition code 'CCC' fields: (FLAGS: S Z x A x P x C)
 | CMC      | 00111111       |   C   | Compliment Carry flag                 |   ✔️    |      ❌      |
 | STC      | 00110111       |   C   | Set Carry flag                        |   ✔️    |      ❌      |
 | JMP a    | 11000011 lb hb |   -   | Unconditional jump                    |   ✔️    |      ❌      |
-| Jccc a   | 11CCC010 lb hb |   -   | Conditional jump                      |   ✔️    |      ❌      |
-| CALL a   | 11001101 lb hb |   -   | Unconditional subroutine call         |   ✔️    |      ❌      |
+| Jccc a   | 11CCC010 lb hb |   -   | Conditional jump                      |   ✔️    |      ✔️      |
+| CALL a   | 11001101 lb hb |   -   | Unconditional subroutine call         |   ✔️    |      ✔️      |
 | Cccc a   | 11CCC100 lb hb |   -   | Conditional subroutine call           |   ✔️    |      ❌      |
-| RET      | 11001001       |   -   | Unconditional return from subroutine  |   ✔️    |      ❌      |
+| RET      | 11001001       |   -   | Unconditional return from subroutine  |   ✔️    |      ✔️      |
 | Rccc     | 11CCC000       |   -   | Conditional return from subroutine    |   ✔️    |      ❌      |
 | RST n    | 11NNN111       |   -   | Restart (Call n*8)                    |   ✔️    |      ❌      |
 | PCHL     | 11101001       |   -   | Jump to address in H:L                |   ✔️    |      ❌      |
-| PUSH RP  | 11RP0101 *2    |   -   | Push register pair on the stack       |   ✔️    |      ❌      |
-| POP RP   | 11RP0001 *2    |  *2   | Pop  register pair from the stack     |   ✔️    |      ❌      |
+| PUSH RP  | 11RP0101 *2    |   -   | Push register pair on the stack       |   ✔️    |      ✔️      |
+| POP RP   | 11RP0001 *2    |  *2   | Pop  register pair from the stack     |   ✔️    |      ✔️      |
 | XTHL     | 11100011       |   -   | Swap H:L with top word on stack       |   ✔️    |      ❌      |
 | SPHL     | 11111001       |   -   | Set SP to content of H:L              |   ✔️    |      ❌      |
 | IN p     | 11011011 pa    |   -   | Read input port into A                |   ✔️    |      ❌      |
