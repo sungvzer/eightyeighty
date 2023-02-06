@@ -93,6 +93,27 @@ impl CPU {
         value
     }
 
+    fn get_register_pair(&self, pair: RegisterPair, insn: &Instruction) -> u16 {
+        let (high_register, low_register) = match pair {
+            RegisterPair::SP => match insn {
+                Instruction::POP(_) | Instruction::PUSH(_) => {
+                    todo!("Get PSW ");
+                }
+                _ => {
+                    return self.stack_pointer;
+                }
+            },
+            RegisterPair::DE => (Register::D, Register::E),
+            RegisterPair::HL => (Register::H, Register::L),
+            RegisterPair::BC => (Register::B, Register::C),
+            _ => todo!("Get register pair {pair} "),
+        };
+
+        let low_byte = self.register(low_register) as u16;
+        let high_byte = self.register(high_register) as u16;
+        ((high_byte << 8) | low_byte).into()
+    }
+
     fn set_register_pair(&mut self, pair: RegisterPair, value: u16, insn: &Instruction) {
         // TODO: Verify that this function handles endianness correctly
         let low_byte = (value & 0x00ff) as u8;
@@ -232,6 +253,11 @@ impl CPU {
             }
             Instruction::RET => {
                 self.program_counter = self.stack_pop();
+            }
+            Instruction::LDAX(pair) => {
+                assert!(pair == RegisterPair::BC || pair == RegisterPair::DE);
+                let address = self.get_register_pair(pair, &insn);
+                self.set_register(Register::A, self.memory[address as usize]);
             }
             _ => todo!("Implement instruction {}", insn),
         };
