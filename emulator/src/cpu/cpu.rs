@@ -79,7 +79,7 @@ impl CPU {
     }
 
     fn stack_push(&mut self, value: u16) {
-        let high_byte = (value & 0xff00 >> 8) as u8;
+        let high_byte = ((value & 0xff00) >> 8) as u8;
         let low_byte = (value & 0x00ff) as u8;
         let stack_pointer = self.stack_pointer as usize;
         self.memory[stack_pointer - 1] = high_byte;
@@ -88,8 +88,10 @@ impl CPU {
     }
 
     fn stack_pop(&mut self) -> u16 {
-        let low_byte = self.memory[self.stack_pointer as usize] as u16;
-        let high_byte = self.memory[(self.stack_pointer + 1) as usize] as u16;
+        let stack_pointer = self.stack_pointer as usize;
+
+        let low_byte = self.memory[stack_pointer] as u16;
+        let high_byte = self.memory[stack_pointer + 1] as u16;
 
         let value: u16 = (high_byte << 8) + low_byte;
         self.stack_pointer += 2;
