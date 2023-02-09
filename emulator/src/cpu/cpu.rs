@@ -204,38 +204,6 @@ impl CPU {
         }
     }
 
-    fn update_flags_u16(&mut self, value: u16) {
-        // Zero flag
-        if value == 0 {
-            self.set_flag(FlagMask::Z);
-        } else {
-            self.unset_flag(FlagMask::Z);
-        }
-
-        // Sign flag
-        if (value & 0x8000) != 0 {
-            self.set_flag(FlagMask::S);
-        } else {
-            self.unset_flag(FlagMask::S);
-        }
-
-        // Parity flag
-        let mut bits: u8 = 0;
-        let mut mask = 0x01;
-        for _ in 0..16 {
-            if value & mask != 0 {
-                bits += 1;
-            }
-            mask <<= 1;
-        }
-
-        if bits % 2 == 0 {
-            self.set_flag(FlagMask::P);
-        } else {
-            self.unset_flag(FlagMask::P);
-        }
-    }
-
     pub fn fetch_decode_execute(&mut self) {
         // Fetch
         let program_counter = self.program_counter as usize;
@@ -254,7 +222,7 @@ impl CPU {
 
         // Execute
         let instruction_size = bytes_to_read + 1;
-        trace!("Executing: {insn}");
+        trace!("${:04x}: {insn}", self.program_counter);
         match insn {
             Instruction::NOP => {}
             Instruction::JMP(addr) => {
@@ -339,7 +307,16 @@ impl CPU {
                 self.set_register_pair(RegisterPair::DE, hl, &insn);
                 self.set_register_pair(RegisterPair::HL, de, &insn);
             }
-            _ => todo!("Implement instruction {}", insn),
+
+            Instruction::OUT(_) => {
+                warn!("TODO: Implement port I/O");
+            }
+            Instruction::IN(_) => {
+                warn!("TODO: Implement port I/O");
+            }
+            _ => {
+                todo!("Implement instruction {}", insn);
+            }
         };
         self.program_counter += instruction_size as u16;
     }

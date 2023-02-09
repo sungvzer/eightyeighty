@@ -15,7 +15,7 @@ struct Arguments {
 }
 
 fn main() {
-    let log_level = std::env::var("LOG_LEVEL").unwrap_or("info".to_owned());
+    let log_level = std::env::var("LOG_LEVEL").unwrap_or_else(|_| "info".to_owned());
     let level = log::Level::from_str(&log_level).unwrap_or(log::Level::Info);
 
     match log_init(level) {
